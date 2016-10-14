@@ -22,8 +22,7 @@
 
 ##### 使用说明
 
-- linux clone之后软链接`User`文件夹或者替换
-- windows 重命名clone的`User`为`Sublime Text 3`替换`%appdata%`目录下的文件夹
+- clone之后软链接`User`文件夹或者替换
 
 ## vim
 
