@@ -31,3 +31,12 @@
 #### 使用
 
 - 替换用户目录下的`.vimrc`文件
+
+## AutoHotKey(windows)
+
+> `AutoHotKey.ahk`
+
+#### 使用
+
+- 安装[AutoHotKey](http://ahkscript.org/)
+- 开机启动`AutoHotKey.ahk`（管理员）
