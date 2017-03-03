@@ -24,6 +24,8 @@
 
 - clone之后软链接`User`文件夹或者替换
 
+---
+
 ## vim
 
 > `.vimrc`文件
@@ -31,6 +33,8 @@
 #### 使用
 
 - 替换用户目录下的`.vimrc`文件
+
+---
 
 ## AutoHotKey(windows)
 
@@ -40,3 +44,15 @@
 
 - 安装[AutoHotKey](http://ahkscript.org/)
 - 开机启动`AutoHotKey.ahk`（管理员）
+
+---
+
+## aria2
+
+> aria2  配置文件
+
+#### 使用
+
+- 配置文件放在固定目录 使用`aria2c --conf-path=path -D`启动，默认`~/.aria2/aria2.conf`
+
+---
