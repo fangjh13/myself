@@ -13,3 +13,9 @@ set relativenumber
 set hlsearch
 
 set incsearch
+
+set ruler
+
+set showmode
+
+syntax on
