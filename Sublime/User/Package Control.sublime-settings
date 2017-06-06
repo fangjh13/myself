@@ -10,13 +10,14 @@
 		"Anaconda",
 		"BracketHighlighter",
 		"Emmet",
-		"Evernote",
 		"Git",
 		"GitGutter",
 		"Markdown Preview",
 		"Package Control",
 		"SideBarEnhancements",
 		"SyncedSideBar",
+		"SyncedSidebarBg",
+		"TrailingSpaces",
 		"Vintageous"
 	]
 }

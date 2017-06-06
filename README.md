@@ -12,12 +12,13 @@
 - Anaconda - python专用
 - BracketHighlighter - 括号匹配高亮
 - Emmet - 前端神器
-- Evernote - evernote支持markdown上传
 - Git - git工具
 - Markdown Preview - markdown预览
 - Package Control - 包管理工具
 - SideBarEnhancements - 增强sidebar右键
-- SyncedSideBar - 当前文件在sidebar中详细定位
+- SyncedSideBar - 选中当前 tab 时 SideBar 同步高亮到相应的目录位置
+- SyncedSidebarBg - 改变siderbar theme
+- TrailingSpaces - 高亮多余的空格，并在每次保存时删去
 - Vintageou - vim模拟插件
 
 ##### 使用说明
