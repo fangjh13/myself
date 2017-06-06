@@ -22,7 +22,9 @@
 
 ##### 使用说明
 
-- clone之后软链接`User`文件夹或者替换
+1. 安装[`SUBLIME TEXT 3`](https://www.sublimetext.com/)
+2. 安装[`Package Control`](https://packagecontrol.io/installation#Simple)
+3. clone之后软链接`User`文件夹或者替换`sublime`的用户文件ubuntu默认在`~/.config/sublime-text-3/Packages`
 
 ---
 
