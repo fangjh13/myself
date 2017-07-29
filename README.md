@@ -56,6 +56,12 @@
 
 #### 使用
 
-- 配置文件放在固定目录 使用`aria2c --conf-path=path -D`启动，默认`~/.aria2/aria2.conf`
+- 修改配置文件`dir`下载目录，放在固定目录。 使用`aria2c --conf-path=path -D`启动，默认`~/.aria2/aria2.conf`。
 
 ---
+
+## vsftpd
+
+> vsftpd 配置文件，配置匿名下载
+
+- 安装`vsftpd`，替换`/etc/vsftpd.conf`
