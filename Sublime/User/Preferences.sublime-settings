@@ -5,10 +5,9 @@
 	"highlight_modified_tabs": true,
 	"ignored_packages":
 	[
-		"Vintage"
 	],
 	"line_padding_bottom": 3,
 	"line_padding_top": 2,
 	"tab_size": 4,
-	"translate_tabs_to_spaces": false
+	"translate_tabs_to_spaces": true
 }

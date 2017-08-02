@@ -9,6 +9,7 @@
 		"All Autocomplete",
 		"Anaconda",
 		"BracketHighlighter",
+		"Color Highlighter",
 		"Emmet",
 		"Git",
 		"GitGutter",
@@ -16,7 +17,6 @@
 		"Package Control",
 		"SideBarEnhancements",
 		"SyncedSideBar",
-		"TrailingSpaces",
-		"Vintageous"
+		"TrailingSpaces"
 	]
 }
