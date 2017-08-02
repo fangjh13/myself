@@ -87,7 +87,7 @@
 
         This can (and should) be overridden by project settings
     */
-    "python_interpreter": "python",
+    "python_interpreter": "python3",
 
     /*
         Disable anaconda completion
