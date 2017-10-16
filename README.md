@@ -65,3 +65,7 @@
 > vsftpd 配置文件，配置匿名下载
 
 - 安装`vsftpd`，替换`/etc/vsftpd.conf`
+
+## screen
+
+> screen 用户配置文件 存放在`~/.screenrc`
