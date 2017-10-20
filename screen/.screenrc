@@ -6,7 +6,7 @@ hardstatus string '%{= kG}[%{G}%H%? %1`%?%{g}][%= %{= kw}%-w%{+b yk} %n*%t%?(%u)
 defscrollback 5000
 
 # welcome message
-startup_message on
+startup_message off
 
 # 256 colors
 attrcolor b ".I"    # allow bold colors - necessary for some reason
@@ -17,13 +17,15 @@ defbce on    # use current bg color for erased chars
 # mousetrack on
 
 # default windows
-screen -t Shell  1 bash
+# screen -t Shell  1 bash
 # screen -t Shell2  2 bash
 # screen -t Python  3 python
 # screen -t Media   4 bash
-select 0
+# select 0
 bind c screen 1 # window numbering starts at 1 not 0
+bind ^c screen 1
 bind 0 select 10
+screen -t Shell 1 bash
 
 # get rid of silly xoff stuff
 bind s split
