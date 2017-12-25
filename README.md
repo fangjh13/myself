@@ -16,8 +16,7 @@
 - Markdown Preview - markdown预览
 - Package Control - 包管理工具
 - SideBarEnhancements - 增强sidebar右键
-- SyncedSideBar - 选中当前 tab 时 SideBar 同步高亮到相应的目录位置
-- SyncedSidebarBg - 改变siderbar theme
+- Focus File on Siderbar - 选中当前 tab 时 SideBar 同步高亮到相应的目录位置
 - TrailingSpaces - 高亮多余的空格，并在每次保存时删去
 - Vintageou - vim模拟插件
 

@@ -8,7 +8,7 @@
 	],
 	"line_padding_bottom": 3,
 	"line_padding_top": 2,
+	"save_on_focus_lost": true,
 	"tab_size": 4,
-	"translate_tabs_to_spaces": true,
-	"save_on_focus_lost": true
+	"translate_tabs_to_spaces": true
 }

@@ -11,12 +11,12 @@
 		"BracketHighlighter",
 		"Color Highlighter",
 		"Emmet",
+		"Focus File on Sidebar",
 		"Git",
 		"GitGutter",
 		"Markdown Preview",
 		"Package Control",
 		"SideBarEnhancements",
-		"SyncedSideBar",
 		"TrailingSpaces"
 	]
 }
