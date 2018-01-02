@@ -1,5 +1,6 @@
 {
 	"auto_complete_commit_on_tab": true,
+	"color_scheme": "Packages/Boxy Theme/schemes/Boxy Monokai.tmTheme",
 	"font_size": 11,
 	"highlight_line": true,
 	"highlight_modified_tabs": true,
@@ -10,5 +11,6 @@
 	"line_padding_top": 2,
 	"save_on_focus_lost": true,
 	"tab_size": 4,
+	"theme": "Boxy Monokai.sublime-theme",
 	"translate_tabs_to_spaces": true
 }

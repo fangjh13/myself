@@ -87,7 +87,7 @@
 
         This can (and should) be overridden by project settings
     */
-    "python_interpreter": "python3",
+    "python_interpreter": "/usr/local/bin/python3",
 
     /*
         Disable anaconda completion
@@ -532,4 +532,5 @@
         Note: this is need for example to can run tests with `twisted's trial`
     */
     // "test_project_path": "./"
+    "env": {"PYTHONIOENCODING": "utf8"}
 }
