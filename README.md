@@ -68,3 +68,9 @@
 ## screen
 
 > screen 用户配置文件 存放在`~/.screenrc`
+
+## zsh
+> `.zshrc`配置文件
+
+## tmux
+> `.tmux.conf`配置文件
