@@ -85,5 +85,9 @@
 
 ## manjaro 
 Arch i3中的配置文件
-> `Xresources`创建软链接到`~/.Xresources`
-> `i3lock.service`自定义睡眠锁屏(i3lock)systemd服务，放入`/etc/systemd/system/`文件夹下，`systemctl enable i3lock.service`设置开机启动
+- `config`i3桌面配置文件，软链接到`~/.i3/config`
+- `Xresources`创建软链接到`~/.Xresources`
+- `i3lock.service`自定义睡眠锁屏(i3lock)systemd服务，放入`/etc/systemd/system/`文件夹下，`systemctl enable i3lock.service`设置开机启动
+- `bin`一些配置桌面的脚本
+  + `monitor` 配置外置显示器，加入`~/.i3/config`中开机调用
+  + `print-colors.sh`测试URxvt颜色显示

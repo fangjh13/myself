@@ -1,0 +1,32 @@
+#!/bin/bash
+EXTERNAL_OUTPUT="HDMI1"
+INTERNAL_OUTPUT="LVDS1"
+CONFIG_DIR="/home/fython/.config/monitor_mode.conf"
+
+# if we don't have a file, start at zero
+if [ ! -f $CONFIG_DIR ] ; then
+  monitor_mode="CLONE"
+
+# otherwise read the value from the file
+else
+  monitor_mode=`cat $CONFIG_DIR`
+fi
+
+if [ $monitor_mode = "EXTEND" ]; then
+        monitor_mode="EXTEND"
+        xrandr --output $INTERNAL_OUTPUT --auto --output $EXTERNAL_OUTPUT --auto --right-of $INTERNAL_OUTPUT
+elif [ $monitor_mode = "EXTERNAL" ]; then
+        monitor_mode="EXTERNAL"
+        xrandr --output $INTERNAL_OUTPUT --off --output $EXTERNAL_OUTPUT --auto --primary
+elif [ $monitor_mode = "INTERNAL" ]; then
+        monitor_mode="INTERNAL"
+        xrandr --output $INTERNAL_OUTPUT --auto --output $EXTERNAL_OUTPUT --off
+elif [ $monitor_mode = "CLONE" ]; then
+	monitor_mode="CLONE"
+	xrandr --output $INTERNAL_OUTPUT --auto --output $EXTERNAL_OUTPUT --auto --same-as $INTERNAL_OUTPUT
+else
+	monitor_mode="CLONE"
+	xrandr --output $INTERNAL_OUTPUT --auto --output $EXTERNAL_OUTPUT --auto --same-as $INTERNAL_OUTPUT
+fi
+echo "${monitor_mode}" > $CONFIG_DIR
+
