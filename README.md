@@ -65,12 +65,25 @@
 
 - 安装`vsftpd`，替换`/etc/vsftpd.conf`
 
+---
+
 ## screen
 
 > screen 用户配置文件 存放在`~/.screenrc`
 
+---
+
 ## zsh
 > `.zshrc`配置文件
 
+---
+
 ## tmux
 > `.tmux.conf`配置文件
+
+---
+
+## manjaro 
+Arch i3中的配置文件
+> `Xresources`创建软链接到`~/.Xresources`
+> `i3lock.service`自定义睡眠锁屏(i3lock)systemd服务，放入`/etc/systemd/system/`文件夹下，`systemctl enable i3lock.service`设置开机启动

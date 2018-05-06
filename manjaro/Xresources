@@ -62,6 +62,7 @@ XTerm*faceName:                   Terminus:size=11:antialias=true
 XTerm*selectToClipboard:          true
 
 !! URxvt.font:                       9x15,xft:TerminessTTFNerdFontMono
+!! URxvt中文使用 WenQuanYi Micro Hei Mono(文泉驿等宽微米黑)
 URxvt.font:                       xft:Bitstream vera sans mono:pixelsize=14:size=11:antialias=true:hinting=true,xft:WenQuanYi Micro Hei Mono:size=11
 
 ! alternative font settings with 'terminus':

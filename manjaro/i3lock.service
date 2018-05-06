@@ -1,0 +1,12 @@
+[Unit]
+Description=Lock screen on sleep
+Before=sleep.target
+
+[Service]
+User=fython
+Type=forking
+Environment=DISPLAY=:0
+ExecStart=/usr/bin/i3lock -c 002b36 -e
+
+[Install]
+WantedBy=sleep.target
