@@ -63,7 +63,10 @@ XTerm*selectToClipboard:          true
 
 !! URxvt.font:                       9x15,xft:TerminessTTFNerdFontMono
 !! URxvt中文使用 WenQuanYi Micro Hei Mono(文泉驿等宽微米黑)
-URxvt.font:                       xft:Bitstream vera sans mono:pixelsize=14:size=11:antialias=true:hinting=true,xft:WenQuanYi Micro Hei Mono:size=11
+!! URxvt.font:                       xft:Bitstream vera sans mono:pixelsize=14:size=11:antialias=true:hinting=true,xft:WenQuanYi Micro Hei Mono:size=11
+!! 如果使用zsh，安装powerline字体后使用DejaVu Sans Mono for Powerline
+URxvt.font:                       xft:DejaVu Sans Mono for Powerline:pixelsize=14:size=11:antialias=true:hinting=true,xft:WenQuanYi Micro Hei Mono:size=11
+
 
 ! alternative font settings with 'terminus':
 !URxvt.font:      -xos4-terminus-medium-r-normal--16-160-72-72-c-80-iso10646-1
