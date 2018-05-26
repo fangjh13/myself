@@ -74,7 +74,7 @@
 ---
 
 ## zsh
-> mac上`.zshrc`配置文件
+> mac上`.zshrc`配置文件(使用oh-my-zsh和zsh-autosuggestions)
 
 ---
 
