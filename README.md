@@ -91,3 +91,8 @@ Arch i3中的配置文件
 - `bin`一些配置桌面的脚本
   + `monitor` 配置外置显示器，加入`~/.i3/config`中开机调用
   + `print-colors.sh`测试URxvt颜色显示
+
+---
+
+## aliases
+自用alias，在'.bashrc'或'.zshrc'中source

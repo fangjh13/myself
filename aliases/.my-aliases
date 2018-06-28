@@ -1,0 +1,13 @@
+kernelName="$(uname -s)"
+
+
+alias vi="vim"
+
+case $kernelName in
+Linux*)
+  alias ll='ls -alFtr --color=auto'
+  ;;
+Darwin*)
+  alias ll='ls -alFtrG'
+  ;;
+esac
