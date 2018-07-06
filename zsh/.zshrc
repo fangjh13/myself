@@ -95,9 +95,10 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-
-# PATH environment
-export PATH="/Users/fython/Library/Python/3.6/bin:$PATH"
-
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
+
+if [ -e ~/.my-aliases ]
+then
+    . ~/.my-aliases
+fi
