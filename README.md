@@ -96,3 +96,8 @@ Arch i3中的配置文件
 
 ## aliases
 自用alias，在`.bashrc`或`.zshrc`中source
+
+---
+
+## miAd
+屏蔽小米电视广告，适用于dnsmasq
