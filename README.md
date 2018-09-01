@@ -95,4 +95,4 @@ Arch i3中的配置文件
 ---
 
 ## aliases
-自用alias，在'.bashrc'或'.zshrc'中source
+自用alias，在`.bashrc`或`.zshrc`中source
