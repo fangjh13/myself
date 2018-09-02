@@ -17,6 +17,8 @@ set showmode
 
 syntax on
 
+" ctrl-a and ctrl-x use decimal only
+set nrformats=
 
 " Only do this part when compiled with support for autocommands.
 if has("autocmd")
