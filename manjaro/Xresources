@@ -65,7 +65,9 @@ XTerm*selectToClipboard:          true
 !! URxvt中文使用 WenQuanYi Micro Hei Mono(文泉驿等宽微米黑)
 !! URxvt.font:                       xft:Bitstream vera sans mono:pixelsize=14:size=11:antialias=true:hinting=true,xft:WenQuanYi Micro Hei Mono:size=11
 !! 如果使用zsh，安装powerline字体后使用DejaVu Sans Mono for Powerline
-URxvt.font:                       xft:DejaVu Sans Mono for Powerline:pixelsize=14:size=11:antialias=true:hinting=true,xft:WenQuanYi Micro Hei Mono:size=11
+!! URxvt.font:                       xft:DejaVu Sans Mono for Powerline:pixelsize=14:size=11:antialias=true:hinting=true,xft:WenQuanYi Micro Hei Mono:size=11
+!! 不知为何在URxvt图形字符使用DejaVu Sans Mono for Powerline后图形字符显示方块，解决办法是安装`pacman -S nerd-fonts-complete`和`yaourt -S rxvt-unicode-cvs-patched-wideglyphs`加上使用MesloLGMDZ Nerd Font Mono字体
+URxvt.font:                       xft:DejaVu Sans Mono:bold:pixelsize=14:size=11:antialias=true:hinting=true,xft:WenQuanYi Micro Hei Mono:size=11,xft:MesloLGMDZ Nerd Font Mono:pixelsize=14:antialias=true:hinting=true
 
 
 ! alternative font settings with 'terminus':
