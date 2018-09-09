@@ -71,6 +71,9 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
+# CTRL+u same as bash
+bindkey \^U backward-kill-line
+
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
