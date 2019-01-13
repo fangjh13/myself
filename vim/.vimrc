@@ -2,18 +2,23 @@ set fileencoding=utf-8
 set fileencodings=ucs-bom,utf-8,utf-16,gbk,big5,gb18030,latin1
 set termencoding=utf-8
 set encoding=utf-8
-
 set number
-
 set relativenumber
-
 set hlsearch
-
 set incsearch
-
 set ruler
-
 set showmode
+set history=1000
+
+" map Ctrl+p as Up Ctrl+n as Down
+cnoremap <C-p> <Up>
+cnoremap <C-n> <Down>
+" map buffer
+nnoremap <silent> [b :bprevious <CR>
+nnoremap <silent> ]b :bnext <CR>
+nnoremap <silent> [B :bfirst <CR>
+nnoremap <silent> ]B :blast <CR>
+
 
 syntax on
 
