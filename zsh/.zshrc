@@ -9,6 +9,8 @@ export ZSH=/Users/fython/.oh-my-zsh
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="robbyrussell"
 # ZSH_THEME="powerlevel9k/powerlevel9k"
+# disable theme for pure
+# ZSH_THEME=""
 
 # Set list of themes to load
 # Setting this variable when ZSH_THEME=random
@@ -62,11 +64,15 @@ ZSH_THEME="robbyrussell"
 plugins=(
   git
   zsh-autosuggestions
+  zsh-syntax-highlighting
 )
 
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
+
+# CTRL+u same as bash
+bindkey \^U backward-kill-line
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -97,8 +103,25 @@ source $ZSH/oh-my-zsh.sh
 
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
+export PATH=/usr/local/sbin${PATH:+:${PATH}}
+export MANPAGER="less -I"
+
+# Initialize the prompt system [https://github.com/sindresorhus/pure]
+autoload -U promptinit; promptinit
+prompt pure
 
 if [ -e ~/.my-aliases ]
 then
     . ~/.my-aliases
 fi
+
+# active fzf
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# Setting fd as the default source for fzf
+export FZF_DEFAULT_COMMAND="fd --type file --color=always"
+export FZF_DEFAULT_OPTS="--ansi"
+# To apply the command to CTRL-T as well
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+# display system info
+neofetch

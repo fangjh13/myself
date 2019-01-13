@@ -9,6 +9,7 @@ set incsearch
 set ruler
 set showmode
 set history=1000
+set backspace=indent,eol,start
 
 " map Ctrl+p as Up Ctrl+n as Down
 cnoremap <C-p> <Up>
@@ -18,7 +19,6 @@ nnoremap <silent> [b :bprevious <CR>
 nnoremap <silent> ]b :bnext <CR>
 nnoremap <silent> [B :bfirst <CR>
 nnoremap <silent> ]B :blast <CR>
-
 
 syntax on
 
@@ -44,4 +44,4 @@ set softtabstop=4   " Sets the number of columns for a TAB.
 set expandtab       " Expand TABs to spaces.
 
 " Mac OS X clipboard sharing
-set clipboard=unnamed
+" set clipboard=unnamed
