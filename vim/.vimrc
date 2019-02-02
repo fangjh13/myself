@@ -8,7 +8,17 @@ set hlsearch
 set incsearch
 set ruler
 set showmode
+set history=1000
 set backspace=indent,eol,start
+
+" map Ctrl+p as Up Ctrl+n as Down
+cnoremap <C-p> <Up>
+cnoremap <C-n> <Down>
+" map buffer
+nnoremap <silent> [b :bprevious <CR>
+nnoremap <silent> ]b :bnext <CR>
+nnoremap <silent> [B :bfirst <CR>
+nnoremap <silent> ]B :blast <CR>
 
 syntax on
 
