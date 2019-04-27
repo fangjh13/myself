@@ -115,13 +115,20 @@ then
     . ~/.my-aliases
 fi
 
+
 # active fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-# Setting fd as the default source for fzf
-export FZF_DEFAULT_COMMAND="fd --type file --color=always"
-export FZF_DEFAULT_OPTS="--ansi"
+export FZF_DEFAULT_OPTS="--no-mouse --height 50% -1 --reverse --multi --inline-info --ansi --preview="'"[[ $(file --mime {}) =~ binary ]] && echo {} is a binary file || (bat --style=numbers --color=always {} || highlight -O ansi -l {} || coderay {} || rougify {} || cat {}) 2> /dev/null | head -300"'" --preview-window="'"right:hidden:wrap"'" --bind="'"f3:execute(bat --style=numbers {} || less -f {}),ctrl-w:toggle-preview,ctrl-d:half-page-down,ctrl-u:half-page-up,ctrl-a:select-all+accept,ctrl-y:execute-silent(echo {+} | pbcopy)"'""
+export FD_OPTIONS="--follow --hidden --exclude .git --color=always"
+# Use git-ls-files inside git repo, otherwise fd
+export FZF_DEFAULT_COMMAND="git ls-tree -r --name-only HEAD --cached --others --exclude-standard || fd --type f --type l ${FD_OPTIONS}"
 # To apply the command to CTRL-T as well
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_CTRL_T_COMMAND="fd ${FD_OPTIONS}"
+export FZF_ALT_C_COMMAND="fd --type d ${FD_OPTIONS}"
+export FZF_CTRL_R_OPTS="--layout=default"
+
+export BAT_PAGER="less -R"
 
 # display system info
 neofetch
+
