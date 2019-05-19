@@ -2,6 +2,7 @@ kernelName="$(uname -s)"
 
 
 alias vi="vim"
+alias rm='echo "This is not the command you are looking for."; false'
 
 case $kernelName in
 Linux*)
