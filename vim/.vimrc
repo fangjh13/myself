@@ -22,6 +22,13 @@ nnoremap <silent> ]B :blast <CR>
 
 syntax on
 
+" wildmode as zsh
+set wildmenu
+set wildmode=full
+
+" map %% expand current direcotry
+cnoremap <expr> %% getcmdtype( ) == ':' ? expand('%:h').'/' : '%%'
+
 " ctrl-a and ctrl-x use decimal only
 set nrformats=
 
