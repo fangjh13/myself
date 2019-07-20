@@ -16,6 +16,7 @@ hide_edge_borders none
 
 # change borders
 # bindsym $mod+u border none
+bindsym $mod+Shift+n border pixel 1
 # bindsym $mod+y border pixel 1
 bindsym $mod+n border normal
 
