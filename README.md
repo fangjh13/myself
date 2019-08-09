@@ -86,6 +86,7 @@
 
 ## manjaro 
 Arch i3中的配置文件
+- `.zshrc`在manjaro使用urxvt上zsh的配置文件
 - `config`i3桌面配置文件，软链接到`~/.i3/config`
 - `Xresources`创建软链接到`~/.Xresources`
 - `i3lock.service`自定义睡眠锁屏(i3lock)systemd服务，放入`/etc/systemd/system/`文件夹下，`systemctl enable i3lock.service`设置开机启动
