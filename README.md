@@ -103,3 +103,27 @@ Arch i3中的配置文件
 
 ## miAd
 屏蔽小米电视广告，适用于dnsmasq
+
+---
+
+## hammerspoon
+Hammerspoon配置文件
+
+```
+├── Spoons                 官方依赖包
+│   ├── ModalMgr.spoon     modal依赖模块
+│   │   ├── docs.json
+│   │   └── init.lua
+│   └── WinWin.spoon       窗口管理依赖
+│       ├── docs.json
+│       └── init.lua
+├── ime                    输入法自动切换
+│   └── init.lua
+├── init.lua
+├── switch                 多显示器窗口切换
+│   └── init.lua
+├── usb                    记录usb日志
+│   └── init.lua
+└── window                 窗口管理
+    └── init.lua
+```
