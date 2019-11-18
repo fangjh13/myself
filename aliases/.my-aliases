@@ -1,8 +1,9 @@
-kernelName="$(uname -s)"
-
-
 alias vi="vim"
 alias rm='echo "This is not the command you are looking for."; false'
+alias tp="trash-put"
+
+
+kernelName="$(uname -s)"
 
 case $kernelName in
 Linux*)
