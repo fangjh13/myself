@@ -79,7 +79,8 @@
 ---
 
 ## tmux
-> `.tmux.conf`配置文件
+> `~/.tmux.conf`配置文件
+
 因为用到了第三方主题需要先安装`git clone https://github.com/jimeh/tmux-themepack.git ~/.tmux-themepack`
 
 ---
