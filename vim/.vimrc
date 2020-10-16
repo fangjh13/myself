@@ -39,6 +39,9 @@ if has("autocmd")
 
     " Use actual tab chars in Makefiles.
     autocmd FileType make set tabstop=8 shiftwidth=8 softtabstop=0 noexpandtab
+    
+    " config yaml indent
+    autocmd FileType yaml,yml setlocal ts=2 sts=2 sw=2 expandtab
 endif
 
 " For everything else, use a tab width of 4 space chars.
