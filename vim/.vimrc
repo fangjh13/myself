@@ -5,6 +5,7 @@ set encoding=utf-8
 set number
 set relativenumber
 set hlsearch
+hi Search ctermbg=LightYellow ctermfg=Red
 set incsearch
 set ruler
 set showmode
