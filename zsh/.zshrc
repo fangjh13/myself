@@ -64,6 +64,7 @@ ZSH_THEME="robbyrussell"
 plugins=(
   git
   zsh-autosuggestions
+  zsh-completions
   zsh-syntax-highlighting
 )
 
@@ -132,3 +133,33 @@ export BAT_PAGER="less -R"
 # display system info
 neofetch
 
+# swith different JDK versions
+# Arch can use `archlinux-java` script
+function jdk {
+    home=/usr/libexec/java_home
+    version=$1
+    if [[ $# -eq 0 ]]; then
+        ${home} -V
+    else
+        export JAVA_HOME=$("${home}" -v "${version}")
+        java -version
+    fi
+}    
+
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+function conda_activate {
+    __conda_setup="$('/Users/fython/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+    if [ $? -eq 0 ]; then
+        eval "$__conda_setup"
+    else
+        if [ -f "/Users/fython/miniconda3/etc/profile.d/conda.sh" ]; then
+            . "/Users/fython/miniconda3/etc/profile.d/conda.sh"
+        else
+            export PATH="/Users/fython/miniconda3/bin:$PATH"
+        fi
+    fi
+    unset __conda_setup
+}
+# <<< conda initialize <<<
