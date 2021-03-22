@@ -56,3 +56,5 @@ set expandtab       " Expand TABs to spaces.
 
 " Mac OS X clipboard sharing
 " set clipboard=unnamed
+" MacVim use Menlo for Powerline font please install it first
+" set guifont=Menlo\ for\ Powerline
