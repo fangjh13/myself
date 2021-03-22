@@ -128,3 +128,10 @@ Hammerspoon配置文件
 └── window                 窗口管理
     └── init.lua
 ```
+
+---
+
+## hyper
+Hyper.js 终端配置文件 `~/.hyper.js` 在mac上测试通过
+
+
