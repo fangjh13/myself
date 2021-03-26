@@ -129,6 +129,8 @@ Hammerspoon配置文件
     └── init.lua
 ```
 
+安装 Hammerspoon，将`.hammerspoon`软连接到`~/.hammerspoon`用户目录下
+
 ---
 
 ## hyper
