@@ -11,6 +11,5 @@ Linux*)
   ;;
 Darwin*)
   alias ll='ls -alFtrG'
-  alias startdt='cd ~/StartDT'
   ;;
 esac
