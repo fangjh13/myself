@@ -23,14 +23,13 @@ ZSH_THEME=""
 # Case-sensitive completion must be off. _ and - will be interchangeable.
 # HYPHEN_INSENSITIVE="true"
 
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment the following line to automatically update without prompting.
-# DISABLE_UPDATE_PROMPT="true"
+# Uncomment one of the following lines to change the auto-update behavior
+# zstyle ':omz:update' mode disabled  # disable automatic updates
+# zstyle ':omz:update' mode auto      # update automatically without asking
+# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
 
 # Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
+# zstyle ':omz:update' frequency 13
 
 # Uncomment the following line if pasting URLs and other text is messed up.
 # DISABLE_MAGIC_FUNCTIONS="true"
@@ -45,8 +44,9 @@ ZSH_THEME=""
 # ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
-# Caution: this setting can cause issues with multiline prompts (zsh 5.7.1 and newer seem to work)
-# See https://github.com/ohmyzsh/ohmyzsh/issues/5765
+# You can also set it to another string to have that shown instead of the default red dots.
+# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
+# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
 # COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
@@ -72,8 +72,8 @@ ZSH_THEME=""
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
+  zsh-completions 
   zsh-autosuggestions
-  zsh-completions
   zsh-syntax-highlighting
 )
 
@@ -124,15 +124,20 @@ export LANG=en_US.UTF-8
 export PATH=/Users/fython/.local/bin:/usr/local/sbin${PATH:+:${PATH}}
 export MANPAGER="less -I"
 
+# `pipx` activate completions for zsh need to have bashcompinit enabled in zsh
+autoload -U bashcompinit
+bashcompinit
+eval "$(register-python-argcomplete pipx)"
+
 # Initialize the prompt system [https://github.com/sindresorhus/pure]
 autoload -U promptinit; promptinit
 prompt pure
 
+# load my aliases
 if [ -e ~/.my-aliases ]
 then
     . ~/.my-aliases
 fi
-
      
 # active fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -157,35 +162,17 @@ eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
 
 # pipenv shell completion
-eval "$(pipenv --completion)"
+eval "$(_PIPENV_COMPLETE=zsh_source pipenv)"
 
 # swith different JDK versions
 # Arch can use `archlinux-java` script
-function jdk {
-    home=/usr/libexec/java_home
-    version=$1
-    if [[ $# -eq 0 ]]; then
-        ${home} -V
-    else
-        export JAVA_HOME=$("${home}" -v "${version}")
-        java -version
-    fi
-}    
-
-
-#     # >>> conda initialize >>>
-#     # !! Contents within this block are managed by 'conda init' !!
-#     function conda_activate {
-#         __conda_setup="$('/Users/fython/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-#         if [ $? -eq 0 ]; then
-#             eval "$__conda_setup"
-#         else
-#             if [ -f "/Users/fython/miniconda3/etc/profile.d/conda.sh" ]; then
-#                 . "/Users/fython/miniconda3/etc/profile.d/conda.sh"
-#             else
-#                 export PATH="/Users/fython/miniconda3/bin:$PATH"
-#             fi
-#         fi
-#         unset __conda_setup
-#     }
-#     # <<< conda initialize <<<
+# function jdk {
+#     home=/usr/libexec/java_home
+#     version=$1
+#     if [[ $# -eq 0 ]]; then
+#         ${home} -V
+#     else
+#         export JAVA_HOME=$("${home}" -v "${version}")
+#         java -version
+#     fi
+# }    
