@@ -1,0 +1,20 @@
+{
+	"suggest.noselect": false,
+	"diagnostic.errorSign": "✘",
+	"diagnostic.warningSign": "!",
+	"diagnostic.infoSign": "?",
+	"diagnostic.checkCurrentLine": true,
+	"coc.preferences.formatOnSaveFiletypes": [
+		"javascript",
+		"html",
+		"json",
+		"css",
+		"scss",
+		"go"
+	],
+	"coc.preferences.hoverTarget": "float",
+	"go.goplsOptions": {
+		"staticcheck": true
+	}
+}
+
