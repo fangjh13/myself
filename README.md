@@ -140,4 +140,13 @@ Hammerspoon配置文件
 ## hyper
 Hyper.js 终端配置文件 `~/.hyper.js` 在mac上测试通过
 
+---
 
+## less
+lessfilter 配置 ，具体配置参见内部文档
+
+```
+.
+├── .lessfilter
+└── README.md
+```
