@@ -1,3 +1,5 @@
+let mapleader = ","
+
 set fileencoding=utf-8
 set fileencodings=ucs-bom,utf-8,utf-16,gbk,big5,gb18030,latin1
 set termencoding=utf-8
@@ -14,6 +16,8 @@ set backspace=indent,eol,start
 set wildignorecase
 set ignorecase
 set smartcase
+set autowrite
+set autoread
 
 " map Ctrl+p as Up Ctrl+n as Down
 cnoremap <C-p> <Up>
@@ -47,6 +51,9 @@ if has("autocmd")
     
     " config yaml indent
     autocmd FileType yaml,yml setlocal ts=2 sts=2 sw=2 expandtab
+
+    " trigger autoread when changing buffers inside while inside vim
+    autocmd FocusGained,BufEnter * :checktime
 
     " fzf temporarily disable the statusline for a cleaner look.
     autocmd! FileType fzf
