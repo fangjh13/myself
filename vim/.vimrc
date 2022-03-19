@@ -41,6 +41,9 @@ cnoremap <expr> %% getcmdtype( ) == ':' ? expand('%:h').'/' : '%%'
 " ctrl-a and ctrl-x use decimal only
 set nrformats=
 
+" map nohlsearch
+nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
+
 " Only do this part when compiled with support for autocommands.
 if has("autocmd")
     " Use filetype detection and file-based automatic indenting.
@@ -70,10 +73,25 @@ set shiftwidth=4    " Indents will have a width of 4.
 set softtabstop=4   " Sets the number of columns for a TAB.
 set expandtab       " Expand TABs to spaces.
 
-" Mac OS X clipboard sharing
-" set clipboard=unnamed
+
+" unnamed register to the + register, which is the X Window clipboard. need vim 7.3.74 and higher
+set clipboard=unnamedplus
+
+
+" visual start search function
+xnoremap * :<C-u>call <SID>VSetSearch()<CR>/<C-R>=@/<CR><CR>
+xnoremap # :<C-u>call <SID>VSetSearch()<CR>?<C-R>=@/<CR><CR>
+
+function! s:VSetSearch()
+  let temp = @s
+  norm! gv"sy
+  let @/ = '\V' . substitute(escape(@s, '/\'), '\n', '\\n', 'g')
+  let @s = temp
+endfunction
+
 " MacVim use Menlo for Powerline font please install it first
 " set guifont=Menlo\ for\ Powerline
+
 
 
 " Plugins will be downloaded under the specified directory.
