@@ -1,4 +1,5 @@
-Xft.dpi: 96
+!! Xft.dpi: 96
+Xft.dpi: 130
 Xft.antialias: true
 Xft.hinting: true
 Xft.rgba: rgb
@@ -10,7 +11,7 @@ XTerm*background: #2b2b2b
 XTerm*foreground: #e7e7e7
 XTerm*pointerColor: #16A085
 XTerm*faceName: Fixed
-XTerm*faceSize: 11
+XTerm*faceSize: 15
 
 *background:                      #272827
 *foreground:                      #657b83
@@ -53,12 +54,12 @@ XTerm*faceSize: 11
 *color15:                         #E8E8E8
 
 Xcursor.theme: xcursor-breeze
-Xcursor.size:                     0
+Xcursor.size:                     4
 
 XTerm*background:                 #272827
 XTerm*foreground:                 #fdf6e3
 XTerm*reverseVideo:               on
-XTerm*faceName:                   Terminus:size=11:antialias=true
+XTerm*faceName:                   Terminus:size=15:antialias=true
 XTerm*selectToClipboard:          true
 
 !! URxvt.font:                       9x15,xft:TerminessTTFNerdFontMono
@@ -67,7 +68,7 @@ XTerm*selectToClipboard:          true
 !! 如果使用zsh，安装powerline字体后使用DejaVu Sans Mono for Powerline
 !! URxvt.font:                       xft:DejaVu Sans Mono for Powerline:pixelsize=14:size=11:antialias=true:hinting=true,xft:WenQuanYi Micro Hei Mono:size=11
 !! 不知为何在URxvt图形字符使用DejaVu Sans Mono for Powerline后图形字符显示方块，解决办法是安装`pacman -S nerd-fonts-complete`和`yay -S rxvt-unicode-cvs-patched-wideglyphs`加上使用MesloLGMDZ Nerd Font Mono字体
-URxvt.font:                       xft:DejaVu Sans Mono:bold:pixelsize=14:size=11:antialias=true:hinting=true,xft:WenQuanYi Micro Hei Mono:size=11,xft:MesloLGMDZ Nerd Font Mono:pixelsize=14:antialias=true:hinting=true
+URxvt.font:                       xft:DejaVu Sans Mono:bold:pixelsize=18:size=15:antialias=true:hinting=true,xft:WenQuanYi Micro Hei Mono:size=15,xft:MesloLGMDZ Nerd Font Mono:pixelsize=18:antialias=true:hinting=true
 
 
 ! alternative font settings with 'terminus':
@@ -304,3 +305,7 @@ URxvt.color15 : #FFFFFF
 ! scroll one line up
 URxvt.keysym.Shift-Up: command:\033]720;1\007
 URxvt.keysym.Shift-Down: command:\033]721;1\007
+
+! disable iso14755 mode
+URxvt.iso14755: false
+URxvt.iso14755_52: false

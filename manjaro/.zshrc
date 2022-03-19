@@ -70,7 +70,9 @@ ZSH_THEME="robbyrussell"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
+  history
   zsh-autosuggestions
+  zsh-completions
   zsh-syntax-highlighting
 )
 
@@ -122,6 +124,10 @@ then
 fi
 
 export BAT_PAGER="less -R"
+
+# pyenv bin environment
+export PYENV_ROOT="${HOME}/.pyenv"
+export PATH="${PYENV_ROOT}/bin:${PATH:+:${PATH}}"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
