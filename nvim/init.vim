@@ -15,6 +15,7 @@ Plug 'fatih/vim-go'
 " Beautify
 Plug 'morhetz/gruvbox'                              " gruvbox colorscheme
 Plug 'fatih/molokai'                                " molokai colorscheme
+Plug 'dracula/vim', { 'as': 'dracula' }             " dracula colorscheme
 Plug 'ryanoasis/vim-devicons'                       " For file icons in lots of plugins
 Plug 'itchyny/lightline.vim'                        " Lightweight statusline without slow plugin integrations
 
@@ -54,7 +55,7 @@ set wildoptions=pum
 set wildignorecase
 " set cc=80                  " set an 80 column border for good coding style
 syntax on                   " syntax highlighting
-set clipboard=unnamedplus   " using system clipboard
+" set clipboard=unnamedplus   " using system clipboard
 filetype plugin on
 " set cursorline              " highlight current cursorline
 set ttyfast                 " Speed up scrolling in Vim
@@ -144,7 +145,7 @@ endif
 " Custom highlighting
 function! MyHighlights() abort
     " Define BadWhitespace before using in a match
-    highlight BadWhitespace ctermbg=red guibg=darkred
+    " highlight BadWhitespace ctermbg=red guibg=darkred
 
     " Highlight spelling mistakes in red
     highlight SpellBad cterm=underline ctermfg=red guifg=red
@@ -156,6 +157,9 @@ function! MyHighlights() abort
 
     " Highlight search results in bold green
     highlight Search guibg=guibg guifg=#B3E820 gui=bold,underline cterm=bold,underline
+
+    " Highlight incsearch
+    " highlight IncSearch
 endfunction
 
 augroup MyColors
