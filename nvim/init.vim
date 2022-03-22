@@ -95,6 +95,8 @@ noremap! <C-a> <Home>
 " map alt-b alt-w move one word in insert mode and Ex mode
 noremap! <A-b> <C-Left>
 noremap! <A-w> <C-Right>
+noremap! <C-b> <Left>
+noremap! <C-f> <Right>
 " trigger autoread when changing buffers inside while inside vim
 autocmd FocusGained,BufEnter * :checktime
 " move line or visually selected block - alt+j/k
@@ -155,16 +157,42 @@ function! MyHighlights() abort
     highlight SignColumn guibg=bg
     highlight SignColumn ctermbg=bg
 
-    " Highlight search results in bold green
-    highlight Search guibg=guibg guifg=#B3E820 gui=bold,underline cterm=bold,underline
-
     " Highlight incsearch
     " highlight IncSearch
+endfunction
+
+" Update colorscheme settings
+function! ColorsUpdate()
+  if !exists('g:loaded_lightline')
+    return
+  endif
+  try
+    if g:colors_name =~# 'dracula'
+      let g:lightline.colorscheme = 'dracula'
+    elseif g:colors_name =~# 'gruvbox'
+      let g:lightline.colorscheme = 'gruvbox'
+    elseif g:colors_name =~# 'molokai'
+      let g:lightline.colorscheme = 'molokai'
+      let g:molokai_original = 1
+      let g:rehash256 = 1
+    else
+      let g:lightline.colorscheme = 'default'
+      let g:rehash256 = 1
+    endif
+
+    call lightline#init()
+    call lightline#colorscheme()
+    call lightline#update()
+  catch
+  endtry
 endfunction
 
 augroup MyColors
     autocmd!
     autocmd ColorScheme * call MyHighlights()
+    autocmd ColorScheme * call ColorsUpdate()
+    " custom highlight seach when use gruvbox
+    autocmd ColorScheme gruvbox highlight Search guibg=guibg guifg=#B3E820 gui=bold,underline cterm=bold,underline
 augroup END
 
 colorscheme gruvbox
