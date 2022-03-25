@@ -75,6 +75,11 @@ nnoremap <silent> [b :bprevious <CR>
 nnoremap <silent> ]b :bnext <CR>
 nnoremap <silent> [B :bfirst <CR>
 nnoremap <silent> ]B :blast <CR>
+" map tabs
+nnoremap <silent> [t :tabprevious <CR>
+nnoremap <silent> ]t :tabnext <CR>
+nnoremap <silent> [T :tabfirst <CR>
+nnoremap <silent> ]T :tablast <CR>
 " map quickfix list
 nnoremap <silent> [c :cprevious<CR>
 nnoremap <silent> ]c :cnext<CR>
