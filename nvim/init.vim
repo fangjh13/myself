@@ -21,6 +21,7 @@ Plug 'itchyny/lightline.vim'                        " Lightweight statusline wit
 
 " Edit
 Plug 'AndrewRadev/splitjoin.vim'                    " split and join code
+Plug 'tpope/vim-commentary'                         " comment
 
 " Git
 Plug 'airblade/vim-gitgutter'                       " shows git diff markers in the sign column and stages/previews/undoes hunks 
