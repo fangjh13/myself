@@ -21,14 +21,26 @@ Plug 'itchyny/lightline.vim'                        " Lightweight statusline wit
 
 " Edit
 Plug 'AndrewRadev/splitjoin.vim'                    " split and join code
+Plug 'machakann/vim-sandwich'                       " pair management
 Plug 'tpope/vim-commentary'                         " comment
+Plug 'ojroques/vim-oscyank', {'branch': 'main'}     " copy text through SSH
 
 " Git
 Plug 'airblade/vim-gitgutter'                       " shows git diff markers in the sign column and stages/previews/undoes hunks 
 Plug 'tpope/vim-fugitive'                           " Git plugin with commands 'G<command>'
 
 " Language server
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}     " Nodejs extension host for neovim, load extensions like VSCode and host language servers
+
+" Custom Wildmenu
+Plug 'romgrk/fzy-lua-native'                        " Luajit FFI bindings to FZY for wilder.nvim
+Plug 'nixprime/cpsm'                                " matcher for wilder.nvim and need manual build python module
+function! UpdateRemotePlugins(...)
+    " Needed to refresh runtime files
+    let &rtp=&rtp
+    UpdateRemotePlugins
+endfunction
+Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }   " adventurous wildmenu
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -316,6 +328,78 @@ let g:go_doc_keywordprg_enabled = 0
 " run test in a new terminal 
 let g:go_term_enabled = 0
 
+" -------------------------------------------------------------------------------------------------
+" wilder.nvim settings
+" -------------------------------------------------------------------------------------------------
+
+call wilder#setup({'modes': [':', '/', '?']})
+
+call wilder#set_option('pipeline', [
+      \   wilder#branch(
+      \     wilder#python_file_finder_pipeline({
+      \       'file_command': {_, arg -> stridx(arg, '.') != -1 ? ['fd', '-tf', '-H'] : ['fd', '-tf']},
+      \       'dir_command': ['fd', '-td'],
+      \       'filters': ['cpsm_filter'],
+      \     }),
+      \     wilder#substitute_pipeline({
+      \       'pipeline': wilder#python_search_pipeline({
+      \         'skip_cmdtype_check': 1,
+      \         'pattern': wilder#python_fuzzy_pattern({
+      \           'start_at_boundary': 0,
+      \         }),
+      \       }),
+      \     }),
+      \     wilder#cmdline_pipeline({
+      \       'fuzzy': 1,
+      \       'fuzzy_filter': has('nvim') ? wilder#lua_fzy_filter() : wilder#vim_fuzzy_filter(),
+      \     }),
+      \     [
+      \       wilder#check({_, x -> empty(x)}),
+      \       wilder#history(),
+      \     ],
+      \     wilder#python_search_pipeline({
+      \       'pattern': wilder#python_fuzzy_pattern({
+      \         'start_at_boundary': 0,
+      \       }),
+      \     }),
+      \   ),
+      \ ])
+
+let s:highlighters = [
+      \ wilder#pcre2_highlighter(),
+      \ has('nvim') ? wilder#lua_fzy_highlighter() : wilder#cpsm_highlighter(),
+      \ ]
+
+let s:popupmenu_renderer = wilder#popupmenu_renderer(wilder#popupmenu_border_theme({
+      \ 'border': 'rounded',
+      \ 'empty_message': wilder#popupmenu_empty_message_with_spinner(),
+      \ 'highlighter': s:highlighters,
+      \ 'left': [
+      \   ' ',
+      \   wilder#popupmenu_devicons(),
+      \   wilder#popupmenu_buffer_flags({
+      \     'flags': ' a + ',
+      \     'icons': {'+': '', 'a': '', 'h': ''},
+      \   }),
+      \ ],
+      \ 'right': [
+      \   ' ',
+      \   wilder#popupmenu_scrollbar(),
+      \ ],
+      \ }))
+
+let s:wildmenu_renderer = wilder#wildmenu_renderer({
+      \ 'highlighter': s:highlighters,
+      \ 'separator': ' · ',
+      \ 'left': [' ', wilder#wildmenu_spinner(), ' '],
+      \ 'right': [' ', wilder#wildmenu_index()],
+      \ })
+
+call wilder#set_option('renderer', wilder#renderer_mux({
+      \ ':': s:popupmenu_renderer,
+      \ '/': s:wildmenu_renderer,
+      \ 'substitute': s:wildmenu_renderer,
+      \ }))
 
 
 " -------------------------------------------------------------------------------------------------
@@ -351,6 +435,42 @@ if exists('$TMUX')
 else
   let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.8 } }
 endif
+
+
+" -------------------------------------------------------------------------------------------------
+" vim-sandwich settings
+" -------------------------------------------------------------------------------------------------
+let g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
+
+" adjust indent automatically
+let g:sandwich#recipes += [
+      \   {
+      \     'buns'        : ['{', '}'],
+      \     'motionwise'  : ['line'],
+      \     'kind'        : ['add'],
+      \     'linewise'    : 1,
+      \     'command'     : ["'[+1,']-1normal! >>"],
+      \   },
+      \   {
+      \     'buns'        : ['{', '}'],
+      \     'motionwise'  : ['line'],
+      \     'kind'        : ['delete'],
+      \     'linewise'    : 1,
+      \     'command'     : ["'[,']normal! <<"],
+      \   }
+      \ ]
+
+" starts insert mode after surrounding by parentheses
+let g:sandwich#recipes += [
+  \   {
+  \     'buns': ['(', ')'],
+  \     'cursor': 'head',
+  \     'command': ['startinsert'],
+  \     'kind': ['add', 'replace'],
+  \     'action': ['add'],
+  \     'input': ['f']
+  \   },
+  \ ]
 
 
 " -------------------------------------------------------------------------------------------------
@@ -518,3 +638,6 @@ nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+
+" coc-yank open yank list
+nnoremap <silent> <space>y  :<C-u>CocList -A --normal yank<cr>
