@@ -372,8 +372,14 @@ let s:highlighters = [
 
 let s:popupmenu_renderer = wilder#popupmenu_renderer(wilder#popupmenu_border_theme({
       \ 'border': 'rounded',
+      \ 'highlighter': [
+      \   wilder#lua_pcre2_highlighter(),
+      \   wilder#lua_fzy_highlighter(),
+      \ ],
+      \ 'highlights': {
+      \   'accent': wilder#make_hl('WilderAccent', 'Pmenu', [{}, {}, {'foreground': '#56FA7B'}]),
+      \ }, 
       \ 'empty_message': wilder#popupmenu_empty_message_with_spinner(),
-      \ 'highlighter': s:highlighters,
       \ 'left': [
       \   ' ',
       \   wilder#popupmenu_devicons(),
