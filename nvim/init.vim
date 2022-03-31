@@ -396,6 +396,13 @@ let s:popupmenu_renderer = wilder#popupmenu_renderer(wilder#popupmenu_border_the
 
 let s:wildmenu_renderer = wilder#wildmenu_renderer({
       \ 'highlighter': s:highlighters,
+      \ 'highlights': {
+      \   'accent': wilder#make_hl('MyHighlight', [
+                    \ {},
+                    \ {},
+                    \ {'bold': 1, 'foreground': '#000', 'background': '#56FA7B'},
+                    \ ]),
+      \ }, 
       \ 'separator': ' · ',
       \ 'left': [' ', wilder#wildmenu_spinner(), ' '],
       \ 'right': [' ', wilder#wildmenu_index()],
