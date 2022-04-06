@@ -70,7 +70,6 @@ set wildignorecase
 syntax on                   " syntax highlighting
 " set clipboard=unnamedplus   " using system clipboard
 filetype plugin on
-" set cursorline              " highlight current cursorline
 set ttyfast                 " Speed up scrolling in Vim
 " set spell                 " enable spell check (may need to download language package)
 " set noswapfile            " disable creating swap file
@@ -133,7 +132,12 @@ if has("autocmd")
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
     \| exe "normal! g'\"" | endif
 endif
-
+" Setting the 'cursorline' and 'cursorcolumn' in the current window
+augroup CursorLine
+  au!
+  au VimEnter,WinEnter,BufWinEnter * setlocal cursorline cursorcolumn
+  au WinLeave * setlocal nocursorline nocursorcolumn
+augroup END
 
 " -------------------------------------------------------------------------------------------------
 " Colors settings
@@ -654,3 +658,4 @@ nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 " coc-yank open yank list
 nnoremap <silent> <space>y  :<C-u>CocList -A --normal yank<cr>
+autocmd FileType go let b:coc_pairs_disabled = ['<']

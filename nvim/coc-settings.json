@@ -10,8 +10,13 @@
         "json",
         "css",
         "scss",
-        "go"
+        "go",
+        "py",
+        "yaml",
+        "toml"
     ],
+    "python.linting.flake8Enabled": true,
+    "python.formatting.provider": "black",
     "coc.preferences.hoverTarget": "float",
     "go.goplsOptions": {
         "staticcheck": true
