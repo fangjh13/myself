@@ -11,12 +11,13 @@
         "css",
         "scss",
         "go",
-        "py",
+        "python",
         "yaml",
         "toml"
     ],
     "python.linting.flake8Enabled": true,
-    "python.formatting.provider": "black",
+    "python.formatting.provider": "autopep8",
+    "pyright.organizeimports.provider": "isort",
     "coc.preferences.hoverTarget": "float",
     "go.goplsOptions": {
         "staticcheck": true
