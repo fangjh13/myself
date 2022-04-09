@@ -144,7 +144,7 @@ augroup END
 let &t_ZH="\e[3m"
 let &t_ZR="\e[23m"
 " python3 provider 
-let g:python3_host_prog = '/home/fython/.pyenv/versions/py310/bin/python'
+let g:python3_host_prog = '~/.pyenv/versions/py310/bin/python'
 
 " -------------------------------------------------------------------------------------------------
 " Colors settings
