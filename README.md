@@ -150,3 +150,6 @@ lessfilter 配置 ，具体配置参见内部文档
 ├── .lessfilter
 └── README.md
 ```
+
+## nvim
+neovim 配置文件夹 将`nvim`软链接到`~/.config/nvim`用户home文件夹下

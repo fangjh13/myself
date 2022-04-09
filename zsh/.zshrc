@@ -133,6 +133,10 @@ eval "$(register-python-argcomplete pipx)"
 autoload -U promptinit; promptinit
 prompt pure
 
+# less filter use pygments
+export LESS='-R'
+export LESSOPEN='|~/.lessfilter %s'
+
 # load my aliases
 if [ -e ~/.my-aliases ]
 then
@@ -160,9 +164,12 @@ export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
 
-# pipenv shell completion
-eval "$(_PIPENV_COMPLETE=zsh_source pipenv)"
+# golang env
+export GOPATH=$HOME/go
+export GOROOT="$(brew --prefix golang)/libexec"
+export PATH="${GOPATH}/bin:${GOROOT}/bin:${PATH}"
 
 # swith different JDK versions
 # Arch can use `archlinux-java` script
