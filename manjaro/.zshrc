@@ -131,6 +131,9 @@ export BAT_PAGER="less -R"
 # pyenv bin environment
 export PYENV_ROOT="${HOME}/.pyenv"
 export PATH="${PYENV_ROOT}/bin:${PATH:+:${PATH}}"
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
