@@ -97,13 +97,15 @@ nnoremap <silent> [c :cprevious<CR>
 nnoremap <silent> ]c :cnext<CR>
 nnoremap <silent> [C :cfirst<CR>
 nnoremap <silent> ]C :clast<CR>
-nnoremap <leader>c :cclose<CR>
+nnoremap <leader>cc :cclose<CR>
 " map location list
 nnoremap <silent> [l :lprevious<CR>
 nnoremap <silent> ]l :lnext<CR>
 nnoremap <silent> [L :lfirst<CR>
 nnoremap <silent> ]L :llast<CR>
-nnoremap <leader>l :lclose<CR>
+nnoremap <leader>lc :lclose<CR>
+" highlighting current line and set mark `l`
+nnoremap <silent> <Leader>l ml:execute 'match Search /\%'.line('.').'l/'<CR>
 " map alt-backspace to delete the previous word in insert mode
 noremap! <A-bs> <C-w>
 noremap! <C-h> <C-w>
