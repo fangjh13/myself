@@ -24,6 +24,7 @@ Plug 'AndrewRadev/splitjoin.vim'                    " split and join code
 Plug 'machakann/vim-sandwich'                       " pair management
 Plug 'tpope/vim-commentary'                         " comment
 Plug 'ojroques/vim-oscyank', {'branch': 'main'}     " copy text through SSH
+Plug 'lyokha/vim-xkbswitch'                         " automatic keyboard layout switching in insert mode (chinese pinyin friendly)
 
 " Git
 Plug 'airblade/vim-gitgutter'                       " shows git diff markers in the sign column and stages/previews/undoes hunks 
@@ -129,6 +130,10 @@ nnoremap gf :vert winc f<cr>
 :nnoremap <silent> yf :let @+=expand('%:p')<CR>
 " copies pwd to clipboard: command yd
 :nnoremap <silent> yd :let @+=expand('%:p:h')<CR>
+" open terminal in bottom
+nmap t<Enter> :bo sp term://zsh\|resize 5<CR>i
+" ESC enter normal mode when in terminal
+tnoremap <Esc> <C-\><C-n>
 " Vim jump to the last position when reopening a file
 if has("autocmd")
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
@@ -145,6 +150,8 @@ let &t_ZH="\e[3m"
 let &t_ZR="\e[23m"
 " python3 provider 
 let g:python3_host_prog = '~/.pyenv/versions/py310/bin/python'
+" vim-xkbswitch enable
+let g:XkbSwitchEnabled = 1
 
 " -------------------------------------------------------------------------------------------------
 " Colors settings
