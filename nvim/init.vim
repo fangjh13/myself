@@ -130,15 +130,18 @@ nnoremap gf :vert winc f<cr>
 :nnoremap <silent> yf :let @+=expand('%:p')<CR>
 " copies pwd to clipboard: command yd
 :nnoremap <silent> yd :let @+=expand('%:p:h')<CR>
+" open termnial in insert mode and enter termnial save file
+augroup TermExtra
+  autocmd!
+  autocmd BufEnter term://* start!
+  autocmd TermEnter * wall
+augroup end
 " open terminal in bottom
-nmap t<Enter> :bo sp term://zsh\|resize 5<CR>i
+nmap t<Enter> :bo sp term://zsh\|resize 5<CR>
 " ESC enter normal mode when in terminal
 tnoremap <Esc> <C-\><C-n>
-" Vim jump to the last position when reopening a file
-if has("autocmd")
-  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
-    \| exe "normal! g'\"" | endif
-endif
+" jump to the last position when reopening a file
+au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 " Setting the 'cursorline' and 'cursorcolumn' in the current window
 augroup CursorLine
   au!
