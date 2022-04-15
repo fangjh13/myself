@@ -155,6 +155,7 @@ let &t_ZR="\e[23m"
 let g:python3_host_prog = '~/.pyenv/versions/py310/bin/python'
 " vim-xkbswitch enable
 let g:XkbSwitchEnabled = 1
+autocmd BufEnter * let b:XkbSwitchILayout = 'us'
 
 " -------------------------------------------------------------------------------------------------
 " Colors settings
