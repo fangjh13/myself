@@ -24,7 +24,9 @@ Plug 'AndrewRadev/splitjoin.vim'                    " split and join code
 Plug 'machakann/vim-sandwich'                       " pair management
 Plug 'tpope/vim-commentary'                         " comment
 Plug 'ojroques/vim-oscyank', {'branch': 'main'}     " copy text through SSH
-Plug 'lyokha/vim-xkbswitch'                         " automatic keyboard layout switching in insert mode (chinese pinyin friendly)
+if !executable('fcitx5-remote')
+    Plug 'lyokha/vim-xkbswitch'                     " automatic keyboard layout switching in insert mode (chinese pinyin friendly use mac) 
+endif
 
 " Git
 Plug 'airblade/vim-gitgutter'                       " shows git diff markers in the sign column and stages/previews/undoes hunks 
@@ -153,9 +155,17 @@ let &t_ZH="\e[3m"
 let &t_ZR="\e[23m"
 " python3 provider 
 let g:python3_host_prog = '~/.pyenv/versions/py310/bin/python'
-" vim-xkbswitch enable
-let g:XkbSwitchEnabled = 1
-autocmd BufEnter * let b:XkbSwitchILayout = 'us'
+" use fcitx5-remote auto switching input method
+if executable('fcitx5-remote')
+    autocmd InsertLeave * :silent !fcitx5-remote -c
+    autocmd BufCreate *  :silent !fcitx5-remote -c
+    autocmd BufEnter *  :silent !fcitx5-remote -c
+    autocmd BufLeave *  :silent !fcitx5-remote -c
+else
+    " mac use vim-xkbswitch enable
+    let g:XkbSwitchEnabled = 1
+    autocmd BufEnter * let b:XkbSwitchILayout = 'us'
+endif
 
 " -------------------------------------------------------------------------------------------------
 " Colors settings
