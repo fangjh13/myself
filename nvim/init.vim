@@ -24,7 +24,7 @@ Plug 'AndrewRadev/splitjoin.vim'                    " split and join code
 Plug 'machakann/vim-sandwich'                       " pair management
 Plug 'tpope/vim-commentary'                         " comment
 Plug 'ojroques/vim-oscyank', {'branch': 'main'}     " copy text through SSH
-if !executable('fcitx5-remote')
+if has('macunix')
     Plug 'lyokha/vim-xkbswitch'                     " automatic keyboard layout switching in insert mode (chinese pinyin friendly use mac) 
 endif
 
@@ -161,8 +161,9 @@ if executable('fcitx5-remote')
     autocmd BufCreate *  :silent !fcitx5-remote -c
     autocmd BufEnter *  :silent !fcitx5-remote -c
     autocmd BufLeave *  :silent !fcitx5-remote -c
-else
-    " mac use vim-xkbswitch enable
+endif
+" mac use vim-xkbswitch enable
+if has('macunix')
     let g:XkbSwitchEnabled = 1
     autocmd BufEnter * let b:XkbSwitchILayout = 'us'
 endif
