@@ -35,6 +35,9 @@ Plug 'tpope/vim-fugitive'                           " Git plugin with commands '
 " Language server
 Plug 'neoclide/coc.nvim', {'branch': 'release'}     " Nodejs extension host for neovim, load extensions like VSCode and host language servers
 
+" DAP Debugging Application
+Plug 'puremourning/vimspector'                      " vimspector multi-language debugging system for Vim
+
 " Custom Wildmenu
 Plug 'romgrk/fzy-lua-native'                        " Luajit FFI bindings to FZY for wilder.nvim
 Plug 'nixprime/cpsm'                                " matcher for wilder.nvim and need manual build python module
@@ -517,6 +520,15 @@ let g:sandwich#recipes += [
   \     'input': ['f']
   \   },
   \ ]
+
+" -------------------------------------------------------------------------------------------------
+" vimspector debuger settings
+" -------------------------------------------------------------------------------------------------
+let g:vimspector_enable_mappings = 'HUMAN'
+" for normal mode - the word under the cursor
+nmap <Leader>di <Plug>VimspectorBalloonEval
+" for visual mode, the visually selected text
+xmap <Leader>di <Plug>VimspectorBalloonEval
 
 
 " -------------------------------------------------------------------------------------------------
