@@ -40,7 +40,6 @@ Plug 'puremourning/vimspector'                      " vimspector multi-language 
 
 " Custom Wildmenu
 Plug 'romgrk/fzy-lua-native'                        " Luajit FFI bindings to FZY for wilder.nvim
-Plug 'nixprime/cpsm'                                " matcher for wilder.nvim and need manual build python module
 function! UpdateRemotePlugins(...)
     " Needed to refresh runtime files
     let &rtp=&rtp
@@ -375,7 +374,7 @@ call wilder#set_option('pipeline', [
       \     wilder#python_file_finder_pipeline({
       \       'file_command': {_, arg -> stridx(arg, '.') != -1 ? ['fd', '-tf', '-H'] : ['fd', '-tf']},
       \       'dir_command': ['fd', '-td'],
-      \       'filters': ['cpsm_filter'],
+      \       'filters': ['fuzzy_filter'],
       \     }),
       \     wilder#substitute_pipeline({
       \       'pipeline': wilder#python_search_pipeline({
