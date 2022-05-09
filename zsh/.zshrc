@@ -72,11 +72,13 @@ ZSH_THEME=""
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
-  zsh-completions 
+  copypath
+  copybuffer
   zsh-autosuggestions
   zsh-syntax-highlighting
 )
 
+fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -157,7 +159,9 @@ export FZF_CTRL_R_OPTS="--layout=default"
 export BAT_PAGER="less -R"
 
 # display system info
-neofetch
+if [[ "$OLDPWD" == "/Users/fython" ]]; then
+    neofetch
+fi
 
 # Load pyenv automatically
 export PYENV_ROOT="$HOME/.pyenv"
