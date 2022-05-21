@@ -255,13 +255,14 @@ set background=dark
 " -------------------------------------------------------------------------------------------------
 " NERDTree settings
 " -------------------------------------------------------------------------------------------------
-" Toggle side window with `CTRL+z`.
-map <C-z> :NERDTreeToggle<CR> 
 let g:NERDTreeDirArrowExpandable = '▸'
 let g:NERDTreeDirArrowCollapsible = '▾'
 " Show hidden files
 let NERDTreeShowHidden=1      
-
+" Toggle side window with `CTRL+z`.
+map <C-z> :NERDTreeToggle<CR> 
+" map NERDTreeFind
+map <leader>nf :NERDTreeFind<CR>
 
 
 " -------------------------------------------------------------------------------------------------
