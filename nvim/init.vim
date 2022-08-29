@@ -1,4 +1,5 @@
 let mapleader = ","
+let maplocalleader = "\\"
 
 " Plugins will be downloaded under the specified directory.
 call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
@@ -16,6 +17,7 @@ Plug 'fatih/vim-go'
 Plug 'morhetz/gruvbox'                              " gruvbox colorscheme
 Plug 'fatih/molokai'                                " molokai colorscheme
 Plug 'dracula/vim', { 'as': 'dracula' }             " dracula colorscheme
+Plug 'arcticicestudio/nord-vim'                     " nord colorscheme
 Plug 'ryanoasis/vim-devicons'                       " For file icons in lots of plugins
 Plug 'itchyny/lightline.vim'                        " Lightweight statusline without slow plugin integrations
 
@@ -198,59 +200,47 @@ if (empty($TMUX))
 endif
 
 " Custom highlighting
-function! MyHighlights() abort
-    " Define BadWhitespace before using in a match
-    " highlight BadWhitespace ctermbg=red guibg=darkred
-
-    " Highlight spelling mistakes in red
-    highlight SpellBad cterm=underline ctermfg=red guifg=red
-
-    " Do not use separate background color in sign column
-    let g:gitgutter_override_sign_column_highlight = 1
-    highlight SignColumn guibg=bg
-    highlight SignColumn ctermbg=bg
-
-    " Highlight incsearch
-    " highlight IncSearch
-endfunction
-
+"
+" hi CurrentWord guifg=#XXXXXX guibg=#XXXXXX gui=underline,bold,italic ctermfg=XXX ctermbg=XXX cterm=underline,bold,italic
+"                     └┴┴┴┴┴──┐     └┴┴┴┴┤     └┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┤         └┴┤         └┴┤       └┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┤
+"  gui-vim font color hex code│          │   gui-vim special styles│           │           │ console-vim special styles│
+"  ───────────────────────────┘          │   ──────────────────────┘           │           │ ──────────────────────────┘
+"       gui-vim background color hex code│     console-vim font term color code│           │
+"       ─────────────────────────────────┘     ────────────────────────────────┘           │
+"                                                    console-vim background term color code│
 " Update colorscheme settings
 function! ColorsUpdate()
-  if !exists('g:loaded_lightline')
-    return
-  endif
   try
-    if g:colors_name =~# 'dracula'
-      let g:lightline.colorscheme = 'dracula'
-    elseif g:colors_name =~# 'gruvbox'
-      let g:lightline.colorscheme = 'gruvbox'
+    if g:colors_name =~# 'gruvbox'
+      " Do not use separate background color in sign column
+      let g:gitgutter_override_sign_column_highlight = 1
+      highlight SignColumn guibg=bg ctermbg=bg
     elseif g:colors_name =~# 'molokai'
-      let g:lightline.colorscheme = 'molokai'
       let g:molokai_original = 1
       let g:rehash256 = 1
     else
-      let g:lightline.colorscheme = 'default'
       let g:rehash256 = 1
     endif
 
-    call lightline#init()
-    call lightline#colorscheme()
-    call lightline#update()
+    if exists('g:loaded_lightline')
+      let g:lightline.colorscheme = g:colors_name
+      call lightline#init()
+      call lightline#colorscheme()
+      call lightline#update()
+      return
+    endif
   catch
+      echo "Caught error: " . v:exception
   endtry
 endfunction
 
 augroup MyColors
     autocmd!
-    autocmd ColorScheme * call MyHighlights()
     autocmd ColorScheme * call ColorsUpdate()
-    " custom highlight seach when use gruvbox
-    autocmd ColorScheme gruvbox highlight Search guibg=guibg guifg=#B3E820 gui=bold,underline cterm=bold,underline
 augroup END
 
 colorscheme gruvbox
 set background=dark
-
 
 " -------------------------------------------------------------------------------------------------
 " NERDTree settings
@@ -546,28 +536,28 @@ xmap <Leader>di <Plug>VimspectorBalloonEval
 " delays and poor user experience.
 set updatetime=100
 
-" Don't pass messages to |ins-completion-menu|.
-set shortmess+=c
-
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved.
-if has("nvim-0.5.0") || has("patch-8.1.1564")
-  " Recently vim can merge signcolumn and number column into one
-  set signcolumn=number
-else
-  set signcolumn=yes
-endif
+set signcolumn=yes
+
+" Don't pass messages to |ins-completion-menu|.
+set shortmess+=c
 
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#pum#visible() ? coc#pum#next(1):
+      \ CheckBackspace() ? "\<Tab>" :
       \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
-function! s:check_back_space() abort
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+" <C-g>u breaks current undo, please make your own choice.
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+function! CheckBackspace() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
@@ -578,11 +568,6 @@ if has('nvim')
 else
   inoremap <silent><expr> <c-@> coc#refresh()
 endif
-
-" Make <CR> auto-select the first completion item and notify coc.nvim to
-" format on enter, <cr> could be remapped by other vim plugin
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 " Use `[g` and `]g` to navigate diagnostics
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
@@ -596,15 +581,13 @@ nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
 " Use K to show documentation in preview window.
-nnoremap <silent> K :call <SID>show_documentation()<CR>
+nnoremap <silent> K :call ShowDocumentation()<CR>
 
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
     call CocActionAsync('doHover')
   else
-    execute '!' . &keywordprg . " " . expand('<cword>')
+    call feedkeys('K', 'in')
   endif
 endfunction
 
@@ -699,4 +682,29 @@ nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 " coc-yank open yank list
 nnoremap <silent> <space>y  :<C-u>CocList -A --normal yank<cr>
+" coc-pairs ignore
 autocmd FileType go let b:coc_pairs_disabled = ['<']
+" coc-highlight highlight current symbol
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" coc install extensions
+let g:coc_global_extensions = [
+      \'coc-markdownlint',
+      \'coc-highlight',
+      \'coc-go',
+      \'coc-json', 
+      \'coc-css',
+      \'coc-html',
+      \'coc-pairs',
+      \'coc-protobuf',
+      \'coc-pyright',
+      \'coc-sh',
+      \'coc-spell-checker',
+      \'coc-toml',
+      \'coc-tsserver',
+      \'coc-yaml',
+      \'coc-yank',
+      \'coc-docker',
+      \'coc-sql',
+      \]
+
