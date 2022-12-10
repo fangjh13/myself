@@ -83,12 +83,15 @@ set ttyfast                 " Speed up scrolling in Vim
 " set backupdir=~/.cache/vim " Directory to store backup files.
 " Use filetype detection and file-based automatic indenting.
 filetype plugin indent on
+" get Lua syntax highlighting inside .vim files 
+let g:vimsyn_embed = 'l'
 
 " map %% expand current direcotry
 cnoremap <expr> %% getcmdtype( ) == ':' ? expand('%:h').'/' : '%%'
 " map Ctrl+p as Up Ctrl+n as Down
 cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
+cnoremap <c-k> <c-\>e getcmdpos() == 1 ? '' : getcmdline()[:getcmdpos()-2]<CR>
 " map buffer
 nnoremap <silent> [b :bprevious <CR>
 nnoremap <silent> ]b :bnext <CR>
@@ -120,7 +123,7 @@ noremap! <C-h> <C-w>
 noremap! <C-a> <Home>
 " map alt-b alt-w move one word in insert mode and Ex mode
 noremap! <A-b> <C-Left>
-noremap! <A-w> <C-Right>
+noremap! <A-f> <C-Right>
 noremap! <C-b> <Left>
 noremap! <C-f> <Right>
 " trigger autoread when changing buffers inside while inside vim

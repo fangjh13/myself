@@ -1,6 +1,7 @@
 alias vi="nvim"
 alias rm='echo "This is not the command you are looking for."; false'
 alias tp="trash-put"
+alias gbr="git branch -r --sort=-committerdate --format='%(HEAD)%(color:yellow)%(refname:short)|%(color:bold green)%(committerdate:relative)|%(color:blue)%(subject)|%(color:magenta)%(authorname)%(color:reset)' --color=always | column -ts'|'"
 
 
 kernelName="$(uname -s)"
