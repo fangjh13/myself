@@ -135,6 +135,11 @@ eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 
+# pipx completion
+autoload -U bashcompinit
+bashcompinit
+eval "$(register-python-argcomplete pipx)"
+
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 function conda_activate {

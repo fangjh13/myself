@@ -252,8 +252,8 @@ let g:NERDTreeDirArrowExpandable = '▸'
 let g:NERDTreeDirArrowCollapsible = '▾'
 " Show hidden files
 let NERDTreeShowHidden=1      
-" Toggle side window with `CTRL+z`.
-map <C-z> :NERDTreeToggle<CR> 
+" Toggle side window
+map <leader>zz :NERDTreeToggle<CR> 
 " map NERDTreeFind
 map <leader>nf :NERDTreeFind<CR>
 

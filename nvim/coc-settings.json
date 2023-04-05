@@ -20,7 +20,6 @@
     "pyright.organizeimports.provider": "isort",
     "coc.preferences.hoverTarget": "float",
     "go.goplsOptions": {
-        "build.experimentalWorkspaceModule": true,
         "staticcheck": true,
         "buildFlags": [
             "-tags=wireinject"
