@@ -1,0 +1,724 @@
+# Default config for sway
+#
+# Copy this to ~/.config/sway/config and edit it to your liking.
+#
+# Read `man 5 sway` for a complete reference.
+
+# styles - set the folder for your theme definition file
+# set $theme /usr/share/sway/themes/matcha-green
+
+# theme variables
+# include $theme/definitions
+
+# global variables
+# include /etc/sway/definitions
+
+# user variables
+# include $HOME/.config/sway/definitions.d/*.conf
+
+# include /etc/sway/inputs/*
+# include /etc/sway/outputs/*
+
+# enable modes
+# include /etc/sway/modes/*
+
+# only enable this if every app you use is compatible with wayland
+# xwayland disable
+
+# include additional configs e.g. to autostart applications
+# include /etc/sway/config.d/*
+
+# user config
+# include $HOME/.config/sway/config.d/*.conf
+
+
+
+### Theme variables
+# based on Base16 Seti UI
+# Author: Appelgriebsch
+
+
+# some global theme specific variables
+set $gtk-theme Matcha-dark-sea
+set $icon-theme Papirus-Dark-Maia
+set $cursor-theme xcursor-breeze
+set $gui-font Roboto 11
+set $term-font JetBrainsMono Nerd Font 14
+set $gtk-color-scheme prefer-dark
+set $kvantum-theme Matcha-Dark
+
+set $color0  #141a1b
+set $color1  #282a2b
+set $color2  #3B758C
+set $color3  #41535B
+set $color4  #43a5d5
+set $color5  #d6d6d6
+set $color6  #eeeeee
+set $color7  #ffffff
+set $color8  #Cd3f45
+set $color9  #db7b55
+set $color10 #e6cd69
+set $color11 #9fca56
+set $color12 #16a085
+set $color13 #55b5db
+set $color14 #a074c4
+set $color15 #8a553f
+
+#$color0
+set $background-color $color0
+#$color6
+set $text-color $color6
+#color1
+set $selection-color $color1
+#color12
+set $accent-color $color12
+
+# Basic color configuration using the Base16 variables for windows and borders.
+# Property Name         Border  BG       Text    Indicator Child Border
+client.focused          $color5 $color12 $color0 $color6   $color12
+client.focused_inactive $color1 $color1  $color5 $color3   $color1
+client.unfocused        $color1 $color0  $color5 $color6   $color1
+client.urgent           $color8 $color8  $color0 $color9   $color8
+client.placeholder      $color0 $color0  $color5 $color0   $color0
+client.background       $color7
+
+
+### Variables
+#
+# Logo key. Use Mod1 for Alt and Mod4 for Super.
+set $mod Mod1
+set $alt_mod Mod4
+
+# Direction keys
+set $left Left
+set $down Down
+set $up Up
+set $right Right
+
+# Alternative direction keys
+set $left_alt h
+set $down_alt j
+set $up_alt k
+set $right_alt l
+
+# Add --to-code to bindsym, support for non-latin layouts
+set $bindsym bindsym --to-code
+
+# For user's convenience, the same for unbindsym
+set $unbindsym unbindsym --to-code
+
+# background
+# set $background /home/fython/Pictures/pexels-ahmed-adly-1270184.jpg
+set $background /home/fython/Pictures/wubi.png
+
+# once-script
+set $once /usr/share/sway/scripts/once.sh
+
+# Your preferred terminal emulator
+# set $term /usr/share/sway/scripts/foot.sh
+set $term /usr/bin/wezterm
+# set $term_cwd $term -D "$(swaycwd 2>/dev/null || echo $HOME)"
+set $term_cwd $term start --cwd "$(swaycwd 2>/dev/null || echo $HOME)"
+
+set $term_float footclient --app-id floating_shell --window-size-chars 82x25
+
+# onscreen bar
+set $onscreen_bar /usr/share/sway/scripts/wob.sh "$accent-color" "$background-color"
+
+# brightness control
+set $brightness /usr/share/sway/scripts/brightness.sh
+set $brightness_up $brightness up | $onscreen_bar
+set $brightness_down $brightness down | $onscreen_bar
+
+# scaling
+set $scale_up /usr/share/sway/scripts/scale.sh up
+set $scale_down /usr/share/sway/scripts/scale.sh down
+
+# audio control
+set $sink_volume pactl get-sink-volume @DEFAULT_SINK@ | grep '^Volume:' | cut -d / -f 2 | tr -d ' ' | sed 's/%//'
+set $source_volume pactl get-source-volume @DEFAULT_SOURCE@ | grep '^Volume:' | cut -d / -f 2 | tr -d ' ' | sed 's/%//'
+set $volume_down $onscreen_bar $(pactl set-sink-volume @DEFAULT_SINK@ -5% && $sink_volume)
+set $volume_up $onscreen_bar $(pactl set-sink-volume @DEFAULT_SINK@ +5% && $sink_volume)
+set $volume_mute $onscreen_bar $(pactl set-sink-mute @DEFAULT_SINK@ toggle && pactl get-sink-mute @DEFAULT_SINK@ | sed -En "/no/ s/.*/$($sink_volume)/p; /yes/ s/.*/0/p")
+set $mic_mute $onscreen_bar $(pactl set-source-mute @DEFAULT_SOURCE@ toggle && pactl get-source-mute @DEFAULT_SOURCE@ | sed -En "/no/ s/.*/$($source_volume)/p; /yes/ s/.*/0/p")
+
+# rofi theme
+set $rofi_theme "* {\nlightbg: $background-color;\nbackground: $background-color;\nlightfg: $accent-color;\nforeground: $text-color;\n}"
+
+# clipboard history
+set $clipboard cliphist list | rofi -dmenu -font "$gui-font" -p "Select item to copy" -lines 10 -width 35 | cliphist decode | wl-copy
+set $clipboard-del cliphist list | rofi -dmenu -font "$gui-font" -p "Select item to delete" -lines 10 -width 35 | cliphist delete
+
+# zeit tracking
+set $zeit_list zeit list --only-projects-and-tasks --append-project-id-to-task | \
+    rofi -dmenu -font "$gui-font" -p "Select task to track" -lines 10 -width 35 | \
+    /usr/share/sway/scripts/zeit.sh track && \
+    pkill -RTMIN+10 waybar
+
+# Your preferred application launcher
+set $menu rofi -show combi -combi-modi "drun,run" -terminal $term -ssh-command "{terminal} {ssh-client} {host} [-p {port}]" -run-shell-command "{terminal} {cmd}" -show-icons -font "$gui-font" -lines 10 -width 35
+
+### Lockscreen configuration
+set $locking swaylock --daemonize --color "$selection-color" --inside-color "$selection-color" --inside-clear-color "$text-color" --ring-color "$color2" --ring-clear-color "$color11" --ring-ver-color "$color13" --show-failed-attempts --fade-in 0.2 --grace 2 --effect-vignette 0.5:0.5 --effect-blur 7x5 --ignore-empty-password --screenshots --clock
+
+# bluetooth menu
+set $bluetooth $once $term_float bluetuith
+
+### Idle configuration
+# This will lock your screen after 300 seconds of inactivity, then turn off
+# your displays after another 300 seconds, and turn your screens back on when
+# resumed. It will also lock your screen before your computer goes to sleep.
+#
+set $idle_timeout 240
+set $locking_timeout 300
+set $screen_timeout 600
+set $sleep_timeout 900
+set $sleep_delay 2
+
+set $swayidle swayidle -w \
+    timeout $locking_timeout 'exec $locking' \
+    timeout $screen_timeout 'swaymsg "output * dpms off"' \
+    resume 'swaymsg "output * dpms on"' \
+    timeout $sleep_timeout 'swaymsg "output * dpms off"; sleep $sleep_delay' \
+    before-sleep 'playerctl pause' \
+    before-sleep 'exec $locking & sleep $sleep_delay'
+
+# statusbar command
+set $statusbar waybar
+set $waybar_position bottom
+
+# pulseaudio command
+set $pulseaudio $term_float pulsemixer
+
+# help command
+set $help /usr/share/sway/scripts/help.sh --toggle
+
+# calendar application
+set $calendar $term_float calcurse
+
+# workspace names
+set $ws1 number 1
+set $ws2 number 2
+set $ws3 number 3
+set $ws4 number 4
+set $ws5 number 5
+set $ws6 number 6
+set $ws7 number 7
+set $ws8 number 8
+set $ws9 number 9
+set $ws10 number 10
+
+# screenshot 
+set $grimshot /usr/share/sway/scripts/grimshot
+set $pipe_output $grimshot save output -
+set $pipe_selection $grimshot save window -
+set $notify_paste  [[ $(wl-paste -l) == "image/png" ]] && notify-send "Screenshot copied to clipboard"
+set $swappy swappy -f -
+set $swappy_pipe swappy -f - -o -
+set $upload_pipe curl -s -F "file=@-;filename=.png" https://x0.at/ | tee >(wl-copy) >(xargs notify-send)
+
+set $screenshot_screen $pipe_output | $swappy && $notify_paste
+set $screenshot_screen_upload $pipe_output | $swappy_pipe | $upload_pipe 
+
+set $screenshot_selection $pipe_selection | $swappy && $notify_paste
+set $screenshot_selection_upload $pipe_selection | $swappy_pipe | $upload_pipe
+
+# autostarts
+set $autostart_dex '[ -x "$(command -v dex)" ] && gdbus wait --session org.kde.StatusNotifierWatcher && dex --autostart'
+set $flashfocus '[ -x "$(command -v flashfocus)" ] && flashfocus'
+set $wlsunset '[ -x "$(command -v wlsunset)" ] && /usr/share/sway/scripts/sunset.sh "on"'
+set $autotiling '[ -x "$(command -v autotiling-rs)" ] && autotiling-rs'
+set $foot_server '[ -x "$(command -v foot)" ] && /usr/share/sway/scripts/foot.sh --server'
+set $help_menu '[ -x "$(command -v nwg-wrapper)" ] && [ -f $HOME/.config/nwg-wrapper/help.sh ] && /usr/share/sway/scripts/help.sh'
+set $workspace_icons '[ -x "$(command -v sworkstyle)" ] && sworkstyle -d -l info &> /tmp/sworkstyle.log'
+set $mounting_daemon '[ -x "$(command -v pcmanfm)" ] && pcmanfm -d'
+# restart kanshi https://github.com/emersion/kanshi/issues/43#issuecomment-531679213
+set $kanshi '[ -x "$(command -v kanshi)" ] && pkill kanshi; exec kanshi'
+set $xdg-dirs '[ -x "$(command -v xdg-user-dirs-update)" ] && exec xdg-user-dirs-update'
+# apply the keyboard layout from localectl if no keyboard layout has been set via config.d
+set $auto_xdg_keyboard 'grep -q xkb_layout ~/.config/sway/config.d/*.conf || /usr/share/sway/scripts/keyboard.sh'
+set $update_rofi_theme 'mkdir -p $HOME/.config/rofi/ && echo $rofi_theme > $HOME/.config/rofi/Manjaro.rasi'
+set $create_rofi_config '[ ! -f $HOME/.config/rofi/config.rasi ] && echo '@import \\"Manjaro\\"' > $HOME/.config/rofi/config.rasi'
+
+# daemons
+set $mako '/usr/share/sway/scripts/mako.sh --font "$term-font" --text-color "$text-color" --border-color "$accent-color" --background-color "$background-color" --border-size 3 --width 400 --height 200 --padding 20 --margin 20 --default-timeout 15000'
+set $swappy_notify '[ -x "$(command -v swappy)" ] && /usr/share/sway/scripts/screenshot-notify.sh'
+set $poweralert '[ -x "$(command -v poweralertd)" ] && pkill poweralertd; poweralertd -s -i "line power" &'
+set $swayr_daemon '[ -x "$(command -v swayrd)" ] && pkill swayrd; RUST_BACKTRACE=1 RUST_LOG=swayr=debug swayrd &> /tmp/swayrd.log'
+set $cliphist_watch '[ -x "$(command -v wl-paste)" ] && [ -x "$(command -v cliphist)" ] && wl-paste --watch pkill -RTMIN+9 waybar'
+set $cliphist_store '[ -x "$(command -v wl-paste)" ] && [ -x "$(command -v cliphist)" ] && wl-paste --watch cliphist store'
+set $calendar_daemon 'calcurse --daemon'
+set $nm_applet '[ -x "$(command -v nm-applet)" ] && nm-applet'
+set $watch_playerctl '[ -x "$(command -v playerctl)" ] && pkill playerctl; playerctl -a metadata --format \'{{status}} {{title}}\' --follow | while read line; do pkill -RTMIN+5 waybar; done'
+set $fcitx5 '/usr/bin/fcitx5 -d'
+
+
+### Input configuration
+#
+# You can get the names of your inputs by running: swaymsg -t get_inputs
+# Read `man 5 sway-input` for more information about this section.
+input "type:keyboard" {
+    xkb_layout us
+    # Capslock key should work as ctrl key
+    # See /usr/share/X11/xkb/rules/xorg.lst for options
+    xkb_options ctrl:nocaps
+}
+input type:touchpad {
+      dwt enabled
+      tap enabled
+      natural_scroll enabled
+}
+
+### Output configuration
+#
+# Example configuration:
+#
+#   output HDMI-A-1 resolution 1920x1080 position 1920,0
+#
+# You can get the names of your outputs by running: swaymsg -t get_outputs
+
+# Default wallpaper
+# output * bg $background fill scale 1.4
+output * bg $background fit scale 1.4
+
+### Key bindings
+#
+# Basics:
+#
+## Launch // Terminal ##
+$bindsym $mod+Return exec $term_cwd
+$bindsym $mod+Shift+Return exec $term
+
+## Action // Kill focused window ##
+$bindsym $mod+Shift+q kill
+
+## Launch // Open launcher ##
+$bindsym $mod+x exec $menu
+# $bindsym $alt_mod+space exec $menu
+
+## Launch // Open clipboard ##
+$bindsym $mod+Shift+p exec $clipboard
+
+# Drag floating windows by holding down $mod and left mouse button.
+# Resize them with right mouse button + $mod.
+# Despite the name, also works for non-floating windows.
+# Change normal to inverse to use left mouse button for resizing and right
+# mouse button for dragging.
+floating_modifier $mod normal
+
+## Action // Reload Sway Configuration ##
+$bindsym $mod+Shift+c reload
+
+## Action // Toggle Waybar ##    
+$bindsym $mod+Shift+b exec pkill -SIGUSR1 waybar
+
+# --locked flags allow the buttons to be used whilst the screen is locked.
+$bindsym --locked XF86AudioRaiseVolume exec $volume_up
+
+$bindsym --locked XF86AudioLowerVolume exec $volume_down
+
+$bindsym --locked XF86AudioMute exec $volume_mute
+
+$bindsym XF86AudioMicMute exec $mic_mute
+
+$bindsym --locked XF86MonBrightnessUp exec $brightness_up
+
+$bindsym --locked XF86MonBrightnessDown exec $brightness_down
+
+$bindsym --locked XF86AudioPlay exec playerctl play-pause
+
+$bindsym XF86AudioNext exec playerctl next
+
+$bindsym XF86AudioPrev exec playerctl previous
+
+$bindsym XF86Search exec $menu
+
+$bindsym XF86PowerOff exec $shutdown
+
+$bindsym XF86TouchpadToggle input type:touchpad events toggle enabled disabled
+
+focus_follows_mouse no
+
+# Moving around:
+#
+# Move your focus around
+## Navigation // Move focus // $mod + ↑ ↓ ← → ##
+$bindsym $mod+$left focus left
+$bindsym $mod+$down focus down
+$bindsym $mod+$up focus up
+$bindsym $mod+$right focus right
+
+$bindsym $mod+$left_alt focus left
+$bindsym $mod+$down_alt focus down
+$bindsym $mod+$up_alt focus up
+$bindsym $mod+$right_alt focus right
+
+## Navigation // Move focused window // $mod + Shift + ↑ ↓ ← → ##
+$bindsym $mod+Shift+$left move left
+$bindsym $mod+Shift+$down move down
+$bindsym $mod+Shift+$up move up
+$bindsym $mod+Shift+$right move right
+
+$bindsym $mod+Shift+$left_alt move left
+$bindsym $mod+Shift+$down_alt move down
+$bindsym $mod+Shift+$up_alt move up
+$bindsym $mod+Shift+$right_alt move right
+
+## Navigation // Move focused workspace // $mod + Alt + ↑ ↓ ← → ##
+$bindsym $mod+$alt_mod+$right move workspace to output right
+$bindsym $mod+$alt_mod+$left move workspace to output left
+$bindsym $mod+$alt_mod+$down move workspace to output down
+$bindsym $mod+$alt_mod+$up move workspace to output up
+
+$bindsym $mod+$alt_mod+$right_alt move workspace to output right
+$bindsym $mod+$alt_mod+$left_alt move workspace to output left
+$bindsym $mod+$alt_mod+$down_alt move workspace to output down
+$bindsym $mod+$alt_mod+$up_alt move workspace to output up
+
+## Navigation // List all open windows in last-recently-used order ##
+$bindsym $mod+p exec env RUST_BACKTRACE=1 swayr switch-window &>> /tmp/swayr.log
+
+## Navigation // Switch to the last recently used window ##
+$bindsym Mod4+Tab exec env RUST_BACKTRACE=1 swayr switch-to-urgent-or-lru-window &>> /tmp/swayr.log
+
+## Navigation // Switch to the last recently used workspace ##
+$bindsym $mod+Tab workspace back_and_forth
+
+#
+# Workspaces:
+#
+## Navigation // Switch workspace // $mod + [number] ##
+$bindsym $mod+1 workspace $ws1
+$bindsym $mod+2 workspace $ws2
+$bindsym $mod+3 workspace $ws3
+$bindsym $mod+4 workspace $ws4
+$bindsym $mod+5 workspace $ws5
+$bindsym $mod+6 workspace $ws6
+$bindsym $mod+7 workspace $ws7
+$bindsym $mod+8 workspace $ws8
+$bindsym $mod+9 workspace $ws9
+$bindsym $mod+0 workspace $ws10
+
+set $focus_ws [ "$focus_after_move" == 'true' ] && swaymsg workspace
+
+## Action // Move focused window to workspace // $mod + Shift + [number] ##
+$bindsym $mod+Shift+1 move container to workspace $ws1, exec $focus_ws $ws1
+$bindsym $mod+Shift+2 move container to workspace $ws2, exec $focus_ws $ws2
+$bindsym $mod+Shift+3 move container to workspace $ws3, exec $focus_ws $ws3
+$bindsym $mod+Shift+4 move container to workspace $ws4, exec $focus_ws $ws4
+$bindsym $mod+Shift+5 move container to workspace $ws5, exec $focus_ws $ws5
+$bindsym $mod+Shift+6 move container to workspace $ws6, exec $focus_ws $ws6
+$bindsym $mod+Shift+7 move container to workspace $ws7, exec $focus_ws $ws7
+$bindsym $mod+Shift+8 move container to workspace $ws8, exec $focus_ws $ws8
+$bindsym $mod+Shift+9 move container to workspace $ws9, exec $focus_ws $ws9
+$bindsym $mod+Shift+0 move container to workspace $ws10, exec $focus_ws $ws10
+
+## Launch // Open launcher in a new workspace ##
+$bindsym $mod+Shift+x exec /usr/share/sway/scripts/first-empty-workspace.py --switch, exec $menu
+
+## Navigation // Switch to a new workspace ##
+$bindsym $mod+Ctrl+n exec /usr/share/sway/scripts/first-empty-workspace.py --switch
+
+## Action // Move focused window to a new workspace ##
+$bindsym $mod+Shift+Ctrl+n exec /usr/share/sway/scripts/first-empty-workspace.py --move
+
+## Action // Move focused window to a new workspace and switch there ##
+$bindsym $mod+Shift+m exec /usr/share/sway/scripts/first-empty-workspace.py --move --switch
+
+#
+# Layout stuff:
+#
+# split orientation
+## Setting // Split windows horizontally ##
+$bindsym $mod+Shift+Ctrl+h split h;exec notify-send 'tile horizontally'
+## Setting // Split windows vertically ##
+$bindsym $mod+Shift+Ctrl+v split v;exec notify-send 'tile vertically'
+## Setting // Toggle horizontall or vertically
+$bindsym $mod+q split toggle
+
+## Action // Switch to window stacking ##
+$bindsym $mod+s layout stacking
+## Action // Switch to window tabbing ##
+$bindsym $mod+w layout tabbed
+## Action // Toggle window splitting ##
+$bindsym $mod+e layout toggle split
+
+## Action // Toggle fullscreen ##
+$bindsym $mod+Shift+f fullscreen
+
+## Action // Toggle global fullscreen for the focused container ##
+# $bindsym $mod+Shift+f fullscreen global
+
+## Action // Scale up  ##
+$bindsym $alt_mod+plus exec $scale_up
+
+## Action // Scale down  ##
+$bindsym $alt_mod+minus exec $scale_down
+
+## Action // Toggle floating / tiling ##
+$bindsym $mod+Shift+space floating toggle
+
+## Navigation // Toggle focus between tiling and floating ##
+$bindsym $mod+space focus mode_toggle
+
+## Navigation // Swap focus to the parent window ##
+$bindsym $mod+a focus parent
+
+## Launch // Toggle Help ##
+$bindsym $mod+question exec $help
+
+## Launch // Open Support ##
+$bindsym $mod+Shift+s exec xdg-open https://github.com/Manjaro-Sway/manjaro-sway/blob/main/SUPPORT.md
+
+# like emacs need wtype installed
+$bindsym Ctrl+e exec wtype -P End -p End
+$bindsym Ctrl+b exec wtype -P left -p left
+$bindsym Ctrl+f exec wtype -P right -p right
+# $bindsym $mod+f exec wtype -M ctrl -P f
+
+
+# Configure border style <normal|1pixel|pixel xx|none|pixel>
+default_border pixel 1
+default_floating_border normal
+# Hide borders
+hide_edge_borders smart
+# hide_edge_borders none
+
+# change borders
+$bindsym $mod+Shift+n border pixel 1
+$bindsym $mod+n border normal
+
+# allow to kill focused floating shell windows using Esc
+$bindsym --release Escape [app_id="floating_shell" con_id=__focused__] kill
+set $mode_recording "<span foreground='$color10'></span>  \
+<span foreground='$color5'><b>Record</b></span> <span foreground='$color10'>(<b>r</b>)</span> \
+<span foreground='$color5'>+ [<span foreground='$color10'><b>Shift</b></span> for 󰍮]</span>"
+
+set $recorder /usr/share/sway/scripts/recorder.sh
+
+mode --pango_markup $mode_recording {
+        $bindsym r exec $recorder, mode "default"
+        $bindsym Shift+r exec $recorder -a, mode "default"
+
+        # Return to default mode.
+        $bindsym Escape mode "default"
+}
+
+## Launch // Recording Mode ##
+$bindsym $mod+Shift+r mode $mode_recording
+
+## Launch // Stop Recording Mode ##
+$bindsym $mod+Escape exec killall -s SIGINT wf-recorderset $mode_resize "<span foreground='$color10'>󰉸</span>  \
+<span foreground='$color5'><b>Resize</b></span> <span foreground='$color10'>(<b>↑ ↓ ← →</b>)</span> \
+<span foreground='$color5'><b>Increase Gaps</b></span> <span foreground='$color10'>(<b>+</b>)</span> \
+<span foreground='$color5'><b>Decrease Gaps</b></span> <span foreground='$color10'>(<b>-</b>)</span>"
+
+mode --pango_markup $mode_resize {
+    # left will shrink the containers width
+    # right will grow the containers width
+    # up will shrink the containers height
+    # down will grow the containers height
+    $bindsym $left resize shrink width 10px
+    $bindsym $down resize grow height 10px
+    $bindsym $up resize shrink height 10px
+    $bindsym $right resize grow width 10px
+
+    $bindsym $left_alt resize shrink width 10px
+    $bindsym $down_alt resize grow height 10px
+    $bindsym $up_alt resize shrink height 10px
+    $bindsym $right_alt resize grow width 10px
+
+    $bindsym Shift+$left resize shrink width 50px
+    $bindsym Shift+$down resize grow height 50px
+    $bindsym Shift+$up resize shrink height 50px
+    $bindsym Shift+$right resize grow width 50px
+
+    $bindsym Shift+$left_alt resize shrink width 50px
+    $bindsym Shift+$down_alt resize grow height 50px
+    $bindsym Shift+$up_alt resize shrink height 50px
+    $bindsym Shift+$right_alt resize grow width 50px
+
+    ## Resize // Window Gaps // + - ##
+    $bindsym minus gaps inner current minus 5px
+    $bindsym plus gaps inner current plus 5px
+
+    # Return to default mode
+    $bindsym Return mode "default"
+    $bindsym Escape mode "default"
+}
+## Launch // Resize Mode ##
+$bindsym $mod+r mode $mode_resize
+gaps inner 5px
+gaps outer 5px
+#
+# Scratchpad:
+#
+# Sway has a "scratchpad", which is a bag of holding for windows.
+# You can send windows there and get them back later.
+
+## Action // Move window to scratchpad ##
+$bindsym $mod+Shift+minus move scratchpad, exec "pkill -RTMIN+7 waybar"
+
+# If there are multiple scratchpad windows, this command cycles through them.
+## Action // Toggle scratchpad ##
+$bindsym $mod+minus scratchpad show, exec "pkill -RTMIN+7 waybar"
+
+set $mode_screenshot "<span foreground='$color10'>󰄄</span>  \
+<span foreground='$color5'><b>Pick</b></span> <span foreground='$color10'>(<b>p</b>)</span> \
+<span foreground='$color5'><b>Output</b></span> <span foreground='$color10'>(<b>o</b>)</span> \
+<span foreground='$color7'>+ <span foreground='$color10'><b>Shift</b></span> for </span>"
+
+mode --pango_markup $mode_screenshot {
+    # output = currently active output
+    $bindsym o mode "default", exec $screenshot_screen
+    $bindsym Shift+o mode "default", exec $screenshot_screen_upload
+
+    # pick the region to screenshot
+    $bindsym p mode "default", exec $screenshot_selection
+    $bindsym Shift+p mode "default", exec $screenshot_selection_upload
+
+    # Return to default mode.
+    $bindsym Escape mode "default"
+}
+
+$bindsym $mod+Shift+a exec $screenshot_selection
+
+## Launch // Screenshot Mode ##
+$bindsym Print mode $mode_screenshot
+set $mode_shutdown "\
+<span foreground='$color10'></span>  \
+<span foreground='$color5'> \
+<span foreground='$color10'>(<b>h</b>)</span>hibernate \
+<span foreground='$color10'>(<b>l</b>)</span>lock \
+<span foreground='$color10'>(<b>e</b>)</span>logout \
+<span foreground='$color10'>(<b>r</b>)</span>reboot \
+<span foreground='$color10'>(<b>u</b>)</span>suspend \
+<span foreground='$color10'>(<b>s</b>)</span>shutdown \
+</span>"
+
+set $purge_cliphist [ $purge_cliphist_logout == 'true' ] && rm -f $HOME/.cache/cliphist/db || exit 0
+
+mode --pango_markup $mode_shutdown {
+    # lock
+    $bindsym l mode "default", exec $locking
+
+    # logout
+    $bindsym e exec $purge_cliphist; exec loginctl terminate-user $USER
+
+    # suspend
+    $bindsym u mode "default", exec systemctl suspend
+
+    # hibernate
+    $bindsym h mode "default", exec systemctl hibernate
+
+    # shutdown
+    $bindsym s exec $purge_cliphist; exec systemctl poweroff
+
+    # reboot
+    $bindsym r exec $purge_cliphist; exec systemctl reboot
+
+    # Return to default mode.
+    $bindsym Escape mode "default"
+}
+
+## Launch // Exit Menu ##
+$bindsym $mod+Shift+e mode $mode_shutdown
+
+# sway does not set DISPLAY/WAYLAND_DISPLAY in the systemd user environment
+# See FS#63021
+# Adapted from xorg's 50-systemd-user.sh, which achieves a similar goal.
+
+exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
+exec hash dbus-update-activation-environment 2>/dev/null && \
+     dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
+exec_always {
+  gsettings set org.gnome.desktop.interface gtk-theme "$gtk-theme"
+  gsettings set org.gnome.desktop.interface icon-theme "$icon-theme"
+  gsettings set org.gnome.desktop.interface cursor-theme "$cursor-theme"
+  gsettings set org.gnome.desktop.interface font-name "$gui-font"
+  gsettings set org.gnome.desktop.interface color-scheme "$gtk-color-scheme"
+  gsettings set org.gnome.desktop.input-sources show-all-sources true
+  gsettings set org.gnome.desktop.interface monospace-font-name "$term-font"
+
+  kvantummanager --set "$kvantum-theme"
+}
+
+bar {
+    position $waybar_position
+    id default
+    swaybar_command /usr/share/sway/scripts/waybar.sh
+}
+
+# don't show gaps if there's only one window on the desktop
+smart_gaps on
+
+# set floating mode for generated windows
+for_window [title="(?:Open|Save) (?:File|Folder|As)"] floating enable;
+for_window [title="(?:Open|Save) (?:File|Folder|As)"] resize set 800 600
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="bubble"] floating enable
+for_window [window_role="task_dialog"] floating enable
+for_window [window_role="Preferences"] floating enable
+for_window [window_type="dialog"] floating enable
+for_window [window_type="menu"] floating enable
+
+# set floating mode for specific applications
+for_window [instance="lxappearance"] floating enable
+for_window [app_id="pamac-manager"] floating enable
+for_window [app_id="blueberry.py"] floating enable
+for_window [app_id="dragon-drop"] floating enable, sticky enable
+for_window [app_id="firefox" title="^Library$"] floating enable, border pixel 1, sticky enable
+for_window [app_id="thunderbird" title=".*Reminder"] floating enable
+for_window [app_id="floating_shell"] floating enable, border pixel 1, sticky enable
+for_window [app_id="Manjaro.manjaro-settings-manager"] floating enable
+for_window [app_id="" title="Picture in picture"] floating enable, sticky enable
+for_window [app_id="" title="Picture-in-Picture"] floating enable, sticky enable
+for_window [instance="around"] floating enable, sticky enable
+for_window [app_id="xsensors"] floating enable
+for_window [title="Save File"] floating enable
+for_window [title="Firefox .*— Sharing Indicator"] floating enable, sticky enable, move to scratchpad
+for_window [app_id="" title=".* is sharing your screen."] floating enable
+for_window [title="^wlay$"] floating enable
+
+# inhibit idle
+for_window [app_id="microsoft teams - preview"] inhibit_idle fullscreen
+for_window [app_id="google-chrome"] inhibit_idle fullscreen
+for_window [app_id="google-chrome-beta"] inhibit_idle fullscreen
+for_window [app_id="google-chrome-unstable"] inhibit_idle fullscreen
+
+# Don't allow applications to inhibit shortcuts, i.e. grab total control of the
+# keyboard. Chrome currently abuses this by enabling it for all "--app=..."
+# shortcuts.
+seat * shortcuts_inhibitor disable
+# autostart background applications
+exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+
+# autostarts
+exec {
+    $xdg-dirs
+    $swayidle
+    $mako
+    $swappy_notify
+    $autostart_dex
+    $flashfocus
+    $wlsunset
+    $autotiling
+    $foot_server
+    $help_menu
+    $cliphist_store
+    $cliphist_watch
+    $workspace_icons
+    $mounting_daemon
+    $fcitx5
+}
+
+exec_always {
+    $kanshi
+    $auto_xdg_keyboard
+    $poweralert
+    $watch_playerctl
+    $calendar_daemon
+    $update_rofi_theme
+    $create_rofi_config
+    $swayr_daemon
+}

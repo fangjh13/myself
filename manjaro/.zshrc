@@ -61,7 +61,7 @@ ZSH_THEME="robbyrussell"
 # HIST_STAMPS="mm/dd/yyyy"
 
 # Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
+ZSH_CUSTOM=~/.oh-my-zsh/custom
 
 # Which plugins would you like to load?
 # Standard plugins can be found in ~/.oh-my-zsh/plugins/*
@@ -70,16 +70,24 @@ ZSH_THEME="robbyrussell"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
-  zsh-autosuggestions
   zsh-syntax-highlighting
+  zsh-history-substring-search
+  zsh-autosuggestions
   copypath
   copybuffer
 )
 
-# add zsh-completions
+# add additional completion definitions for Zsh.
 fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
 
 source $ZSH/oh-my-zsh.sh
+
+# zsh-history-substring-search bind keyboard shortcuts 
+# https://github.com/zsh-users/zsh-history-substring-search#zsh-history-substring-search
+bindkey -M emacs '^P' history-substring-search-up
+bindkey -M emacs '^N' history-substring-search-down
+bindkey '^[OA' history-substring-search-up     # 
+bindkey '^[OB' history-substring-search-down   # 
 
 # User configuration
 
@@ -110,7 +118,7 @@ bindkey \^U backward-kill-line
 # active fzf, first run `sudo pacman -S fzf fd`
 [ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
 [ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
-export FZF_DEFAULT_OPTS="--no-mouse --height 50% -1 --reverse --multi --inline-info --ansi --preview="'"[[ $(file --mime {}) =~ binary ]] && echo {} is a binary file || (bat --style=numbers --color=always {} || highlight -O ansi -l {} || coderay {} || rougify {} || cat {}) 2> /dev/null | head -300"'" --preview-window="'"right:hidden:wrap"'" --bind="'"f3:execute(bat --style=numbers {} || less -f {}),ctrl-w:toggle-preview,ctrl-d:half-page-down,ctrl-u:half-page-up,ctrl-a:select-all+accept,ctrl-y:execute-silent(echo {+} | xclip -sel clip)"'""
+export FZF_DEFAULT_OPTS="--no-mouse --height 50% -1 --reverse --multi --inline-info --ansi --preview="'"[[ $(file --mime {}) =~ binary ]] && echo {} is a binary file || (bat --style=numbers --color=always {} || highlight -O ansi -l {} || coderay {} || rougify {} || cat {}) 2> /dev/null | head -300"'" --preview-window="'"right:hidden:wrap"'" --bind="'"f3:execute(bat --style=numbers {} || less -f {}),ctrl-w:toggle-preview,ctrl-d:half-page-down,ctrl-u:half-page-up,ctrl-a:select-all+accept,ctrl-y:execute-silent(echo {+} | wl-copy)"'""
 export FD_OPTIONS="--follow --hidden --exclude .git --color=always"
 # Use git-ls-files inside git repo, otherwise fd
 export FZF_DEFAULT_COMMAND="git ls-tree -r --name-only HEAD --cached --others --exclude-standard || fd --type f --type l ${FD_OPTIONS}"
@@ -131,9 +139,12 @@ export BAT_PAGER="less -R"
 # pyenv bin environment
 export PYENV_ROOT="${HOME}/.pyenv"
 export PATH="${PYENV_ROOT}/bin:${PATH:+:${PATH}}"
-eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
+# install pyenv-virtualenv, enable auto-activation of virtualenvs
 eval "$(pyenv virtualenv-init -)"
+
+# go bin path
+export PATH="${HOME}/go/bin:${PATH:+:${PATH}}"
 
 # pipx completion
 autoload -U bashcompinit

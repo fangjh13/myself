@@ -30,11 +30,12 @@ config.window_decorations = "RESIZE"
 
 -- font
 config.font = wezterm.font_with_fallback({
-  { family = "Hack Nerd Font Mono", weight = "Bold" },
+  -- { family = "Hack Nerd Font Mono", weight = "Bold" },
+  { family = "Hack Nerd Font Mono" },
   { family = "HarmonyOS Sans" },
 })
 -- config.font = wezterm.font("LXGW WenKai", { weight = "Bold" })
-config.font_size = 13.5
+config.font_size = 12.5
 
 -- hide tab bar
 config.hide_tab_bar_if_only_one_tab = true

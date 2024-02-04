@@ -1,16 +1,24 @@
 alias vi="nvim"
+alias vidos='vi  -c ":e ++ff=unix" -c "set list"'
 alias rm='echo "This is not the command you are looking for."; false'
 alias tp="trash-put"
 alias gbr="git branch -r --sort=-committerdate --format='%(HEAD)%(color:yellow)%(refname:short)|%(color:bold green)%(committerdate:relative)|%(color:blue)%(subject)|%(color:magenta)%(authorname)%(color:reset)' --color=always | column -ts'|'"
+alias img_upload='wl-paste | curl -s -F "file=@-;filename=.png" https://x0.at/ | tee >(wl-copy) >(xargs notify-send)'
+alias mvi='mpv --config-dir=$HOME/.config/mvi'
 
+alias ls='exa --color=always --group-directories-first'
+alias ll='eza -alF --sort=modified --colour always'
+# kernelName="$(uname -s)"
+# 
+# case $kernelName in
+# Linux*)
+#   alias ll='ls -alFtr --color=auto'
+#   ;;
+# Darwin*)
+#   alias ll='ls -alFtrG'
+#   ;;
+# esac
 
-kernelName="$(uname -s)"
-
-case $kernelName in
-Linux*)
-  alias ll='ls -alFtr --color=auto'
-  ;;
-Darwin*)
-  alias ll='ls -alFtrG'
-  ;;
-esac
+with_proxy(){
+   HTTPS_PROXY=http://127.0.0.1:7890 HTTP_PROXY=https://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7891 "$@"
+}
