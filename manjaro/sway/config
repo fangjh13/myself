@@ -470,12 +470,6 @@ $bindsym $mod+question exec $help
 ## Launch // Open Support ##
 $bindsym $mod+Shift+s exec xdg-open https://github.com/Manjaro-Sway/manjaro-sway/blob/main/SUPPORT.md
 
-# like emacs need wtype installed
-$bindsym Ctrl+e exec wtype -P End -p End
-$bindsym Ctrl+b exec wtype -P left -p left
-$bindsym Ctrl+f exec wtype -P right -p right
-# $bindsym $mod+f exec wtype -M ctrl -P f
-
 
 # Configure border style <normal|1pixel|pixel xx|none|pixel>
 default_border pixel 1
@@ -624,21 +618,52 @@ mode --pango_markup $mode_shutdown {
 ## Launch // Exit Menu ##
 $bindsym $mod+Shift+e mode $mode_shutdown
 
+## In /etc/sway/config.d folder config
+
+# Import variables set-up by sway into the environment and notify systemd that
+# sway is ready.
+exec test -n "$$NOTIFY_SOCKET" \
+  && systemctl --user import-environment SWAYSOCK \
+					 DISPLAY \
+					 I3SOCK \
+					 WAYLAND_DISPLAY \
+					 XCURSOR_SIZE \
+					 XCURSOR_THEME \
+  && systemd-notify --ready
+
+
 # sway does not set DISPLAY/WAYLAND_DISPLAY in the systemd user environment
 # See FS#63021
 # Adapted from xorg's 50-systemd-user.sh, which achieves a similar goal.
 
-exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
+# Upstream refuses to set XDG_CURRENT_DESKTOP so we have to.
+exec systemctl --user set-environment XDG_CURRENT_DESKTOP=sway
+exec systemctl --user import-environment DISPLAY \
+                                         SWAYSOCK \
+                                         WAYLAND_DISPLAY \
+                                         XDG_CURRENT_DESKTOP
+
 exec hash dbus-update-activation-environment 2>/dev/null && \
-     dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
+     dbus-update-activation-environment --systemd DISPLAY \
+                                                  SWAYSOCK \
+                                                  XDG_CURRENT_DESKTOP=sway \
+                                                  WAYLAND_DISPLAY
+
+
 exec_always {
-  gsettings set org.gnome.desktop.interface gtk-theme "$gtk-theme"
+  /usr/share/sway/scripts/enable-gtk-theme.sh "$gtk-theme"
   gsettings set org.gnome.desktop.interface icon-theme "$icon-theme"
   gsettings set org.gnome.desktop.interface cursor-theme "$cursor-theme"
   gsettings set org.gnome.desktop.interface font-name "$gui-font"
-  gsettings set org.gnome.desktop.interface color-scheme "$gtk-color-scheme"
   gsettings set org.gnome.desktop.input-sources show-all-sources true
   gsettings set org.gnome.desktop.interface monospace-font-name "$term-font"
+
+  gsettings set org.freedesktop.appearance color-scheme "$gtk-color-scheme"
+  gsettings set org.gnome.desktop.interface color-scheme "$gtk-color-scheme"
+
+  # make sure gtk-4.0 has the theme settings of the currently active theme
+  
+  /usr/share/sway/scripts/generate-bg.sh "$accent-color" "$text-color" "$background-color"
 
   kvantummanager --set "$kvantum-theme"
 }
@@ -653,7 +678,7 @@ bar {
 smart_gaps on
 
 # set floating mode for generated windows
-for_window [title="(?:Open|Save) (?:File|Folder|As)"] floating enable;
+for_window [title="(?:Open|Save) (?:File|Folder|As)"] floating enable
 for_window [title="(?:Open|Save) (?:File|Folder|As)"] resize set 800 600
 for_window [window_role="pop-up"] floating enable
 for_window [window_role="bubble"] floating enable
@@ -680,45 +705,45 @@ for_window [title="Firefox .*— Sharing Indicator"] floating enable, sticky ena
 for_window [app_id="" title=".* is sharing your screen."] floating enable
 for_window [title="^wlay$"] floating enable
 
-# inhibit idle
-for_window [app_id="microsoft teams - preview"] inhibit_idle fullscreen
-for_window [app_id="google-chrome"] inhibit_idle fullscreen
-for_window [app_id="google-chrome-beta"] inhibit_idle fullscreen
-for_window [app_id="google-chrome-unstable"] inhibit_idle fullscreen
-
 # Don't allow applications to inhibit shortcuts, i.e. grab total control of the
 # keyboard. Chrome currently abuses this by enabling it for all "--app=..."
 # shortcuts.
 seat * shortcuts_inhibitor disable
+
 # autostart background applications
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 
 # autostarts
 exec {
+    $initialize_foot_server
     $xdg-dirs
     $swayidle
-    $mako
     $swappy_notify
     $autostart_dex
     $flashfocus
     $wlsunset
     $autotiling
-    $foot_server
     $help_menu
     $cliphist_store
     $cliphist_watch
     $workspace_icons
     $mounting_daemon
-    $fcitx5
+    $initialize_swayr_daemon
+    $initialize_poweralert_daemon
+    $initialize_idlehack_daemon
 }
 
 exec_always {
+    $restart_foot_server
     $kanshi
+    $clip-persist
+    $way_displays
+    $mako
     $auto_xdg_keyboard
-    $poweralert
     $watch_playerctl
     $calendar_daemon
-    $update_rofi_theme
+    $enable_noisetorch
+    $onscreen_bar --refresh
     $create_rofi_config
-    $swayr_daemon
+    $update_rofi_theme
 }
