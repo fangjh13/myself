@@ -32,7 +32,6 @@
 # include $HOME/.config/sway/config.d/*.conf
 
 
-
 ### Theme variables
 # based on Base16 Seti UI
 # Author: Appelgriebsch
@@ -184,8 +183,8 @@ set $swayidle swayidle -w \
     before-sleep 'exec $locking & sleep $sleep_delay'
 
 # statusbar command
-set $statusbar waybar
-set $waybar_position bottom
+set $statusbar /usr/share/sway/scripts/waybar.sh
+set $waybar_position top
 
 # pulseaudio command
 set $pulseaudio $term_float pulsemixer
@@ -250,8 +249,6 @@ set $cliphist_store '[ -x "$(command -v wl-paste)" ] && [ -x "$(command -v cliph
 set $calendar_daemon 'calcurse --daemon'
 set $nm_applet '[ -x "$(command -v nm-applet)" ] && nm-applet'
 set $watch_playerctl '[ -x "$(command -v playerctl)" ] && pkill playerctl; playerctl -a metadata --format \'{{status}} {{title}}\' --follow | while read line; do pkill -RTMIN+5 waybar; done'
-set $fcitx5 '/usr/bin/fcitx5 -d'
-
 
 ### Input configuration
 #
@@ -281,6 +278,7 @@ input type:touchpad {
 # output * bg $background fill scale 1.4
 output * bg $background fit scale 1.4
 
+### /etc/sway/modes/default
 ### Key bindings
 #
 # Basics:
@@ -293,11 +291,11 @@ $bindsym $mod+Shift+Return exec $term
 $bindsym $mod+Shift+q kill
 
 ## Launch // Open launcher ##
-$bindsym $mod+x exec $menu
-# $bindsym $alt_mod+space exec $menu
+$bindsym $mod+d exec $menu
+$bindsym $alt_mod+space exec $menu
 
 ## Launch // Open clipboard ##
-$bindsym $mod+Shift+p exec $clipboard
+$bindsym $mod+Shift+v exec $clipboard
 
 # Drag floating windows by holding down $mod and left mouse button.
 # Resize them with right mouse button + $mod.
@@ -414,13 +412,13 @@ $bindsym $mod+Shift+9 move container to workspace $ws9, exec $focus_ws $ws9
 $bindsym $mod+Shift+0 move container to workspace $ws10, exec $focus_ws $ws10
 
 ## Launch // Open launcher in a new workspace ##
-$bindsym $mod+Shift+x exec /usr/share/sway/scripts/first-empty-workspace.py --switch, exec $menu
+$bindsym $mod+Shift+d exec /usr/share/sway/scripts/first-empty-workspace.py --switch, exec $menu
 
 ## Navigation // Switch to a new workspace ##
 $bindsym $mod+Ctrl+n exec /usr/share/sway/scripts/first-empty-workspace.py --switch
 
 ## Action // Move focused window to a new workspace ##
-$bindsym $mod+Shift+Ctrl+n exec /usr/share/sway/scripts/first-empty-workspace.py --move
+$bindsym $mod+Shift+n exec /usr/share/sway/scripts/first-empty-workspace.py --move
 
 ## Action // Move focused window to a new workspace and switch there ##
 $bindsym $mod+Shift+m exec /usr/share/sway/scripts/first-empty-workspace.py --move --switch
@@ -470,6 +468,8 @@ $bindsym $mod+question exec $help
 ## Launch // Open Support ##
 $bindsym $mod+Shift+s exec xdg-open https://github.com/Manjaro-Sway/manjaro-sway/blob/main/SUPPORT.md
 
+## Launch // Inhibit Idle ##
+$bindsym $mod+Shift+i exec inhibit-idle interactive
 
 # Configure border style <normal|1pixel|pixel xx|none|pixel>
 default_border pixel 1
@@ -478,12 +478,10 @@ default_floating_border normal
 hide_edge_borders smart
 # hide_edge_borders none
 
-# change borders
-$bindsym $mod+Shift+n border pixel 1
-$bindsym $mod+n border normal
-
 # allow to kill focused floating shell windows using Esc
 $bindsym --release Escape [app_id="floating_shell" con_id=__focused__] kill
+
+### /etc/sway/modes/recording
 set $mode_recording "<span foreground='$color10'></span>  \
 <span foreground='$color5'><b>Record</b></span> <span foreground='$color10'>(<b>r</b>)</span> \
 <span foreground='$color5'>+ [<span foreground='$color10'><b>Shift</b></span> for 󰍮]</span>"
@@ -502,7 +500,11 @@ mode --pango_markup $mode_recording {
 $bindsym $mod+Shift+r mode $mode_recording
 
 ## Launch // Stop Recording Mode ##
-$bindsym $mod+Escape exec killall -s SIGINT wf-recorderset $mode_resize "<span foreground='$color10'>󰉸</span>  \
+$bindsym $mod+Escape exec killall -s SIGINT wf-recorder
+
+
+### /etc/sway/modes/resize
+set $mode_resize "<span foreground='$color10'>󰉸</span>  \
 <span foreground='$color5'><b>Resize</b></span> <span foreground='$color10'>(<b>↑ ↓ ← →</b>)</span> \
 <span foreground='$color5'><b>Increase Gaps</b></span> <span foreground='$color10'>(<b>+</b>)</span> \
 <span foreground='$color5'><b>Decrease Gaps</b></span> <span foreground='$color10'>(<b>-</b>)</span>"
@@ -544,6 +546,8 @@ mode --pango_markup $mode_resize {
 $bindsym $mod+r mode $mode_resize
 gaps inner 5px
 gaps outer 5px
+
+### /etc/sway/modes/scratchpad
 #
 # Scratchpad:
 #
@@ -551,12 +555,13 @@ gaps outer 5px
 # You can send windows there and get them back later.
 
 ## Action // Move window to scratchpad ##
-$bindsym $mod+Shift+minus move scratchpad, exec "pkill -RTMIN+7 waybar"
+$bindsym $mod+Shift+minus move scratchpad, exec "waybar-signal scratchpad"
 
 # If there are multiple scratchpad windows, this command cycles through them.
 ## Action // Toggle scratchpad ##
-$bindsym $mod+minus scratchpad show, exec "pkill -RTMIN+7 waybar"
+$bindsym $mod+minus scratchpad show, exec "waybar-signal scratchpad"
 
+### /etc/sway/modes/screenshot
 set $mode_screenshot "<span foreground='$color10'>󰄄</span>  \
 <span foreground='$color5'><b>Pick</b></span> <span foreground='$color10'>(<b>p</b>)</span> \
 <span foreground='$color5'><b>Output</b></span> <span foreground='$color10'>(<b>o</b>)</span> \
@@ -575,14 +580,15 @@ mode --pango_markup $mode_screenshot {
     $bindsym Escape mode "default"
 }
 
-$bindsym $mod+Shift+a exec $screenshot_selection
-
 ## Launch // Screenshot Mode ##
 $bindsym Print mode $mode_screenshot
+# screenshot
+$bindsym $mod+Shift+a exec $screenshot_selection
+
+### /etc/sway/modes/shutdown
 set $mode_shutdown "\
 <span foreground='$color10'></span>  \
 <span foreground='$color5'> \
-<span foreground='$color10'>(<b>h</b>)</span>hibernate \
 <span foreground='$color10'>(<b>l</b>)</span>lock \
 <span foreground='$color10'>(<b>e</b>)</span>logout \
 <span foreground='$color10'>(<b>r</b>)</span>reboot \
@@ -597,13 +603,10 @@ mode --pango_markup $mode_shutdown {
     $bindsym l mode "default", exec $locking
 
     # logout
-    $bindsym e exec $purge_cliphist; exec loginctl terminate-user $USER
+    $bindsym e exec $purge_cliphist; exec swaymsg exit
 
     # suspend
     $bindsym u mode "default", exec systemctl suspend
-
-    # hibernate
-    $bindsym h mode "default", exec systemctl hibernate
 
     # shutdown
     $bindsym s exec $purge_cliphist; exec systemctl poweroff
@@ -619,7 +622,7 @@ mode --pango_markup $mode_shutdown {
 $bindsym $mod+Shift+e mode $mode_shutdown
 
 ## In /etc/sway/config.d folder config
-
+### /etc/sway/config.d/10-service.conf
 # Import variables set-up by sway into the environment and notify systemd that
 # sway is ready.
 exec test -n "$$NOTIFY_SOCKET" \
@@ -631,7 +634,7 @@ exec test -n "$$NOTIFY_SOCKET" \
 					 XCURSOR_THEME \
   && systemd-notify --ready
 
-
+### /etc/sway/config.d/50-systemd-user.conf
 # sway does not set DISPLAY/WAYLAND_DISPLAY in the systemd user environment
 # See FS#63021
 # Adapted from xorg's 50-systemd-user.sh, which achieves a similar goal.
@@ -649,7 +652,7 @@ exec hash dbus-update-activation-environment 2>/dev/null && \
                                                   XDG_CURRENT_DESKTOP=sway \
                                                   WAYLAND_DISPLAY
 
-
+### /etc/sway/config.d/90-enable-theme.conf
 exec_always {
   /usr/share/sway/scripts/enable-gtk-theme.sh "$gtk-theme"
   gsettings set org.gnome.desktop.interface icon-theme "$icon-theme"
@@ -668,12 +671,14 @@ exec_always {
   kvantummanager --set "$kvantum-theme"
 }
 
+### /etc/sway/config.d/96-waybar-config.conf
 bar {
-    position $waybar_position
     id default
-    swaybar_command /usr/share/sway/scripts/waybar.sh
+    swaybar_command $statusbar
+    position $waybar_position
 }
 
+### /etc/sway/config.d/98-application-defaults.conf
 # don't show gaps if there's only one window on the desktop
 smart_gaps on
 
@@ -710,6 +715,7 @@ for_window [title="^wlay$"] floating enable
 # shortcuts.
 seat * shortcuts_inhibitor disable
 
+### /etc/sway/config.d/99-autostart-applications.conf
 # autostart background applications
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 
