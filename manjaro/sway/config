@@ -86,8 +86,8 @@ client.background       $color7
 ### Variables
 #
 # Logo key. Use Mod1 for Alt and Mod4 for Super.
-set $mod Mod1
-set $alt_mod Mod4
+set $mod Mod4
+set $alt_mod Mod1
 
 # Direction keys
 set $left Left
@@ -261,7 +261,7 @@ input "type:keyboard" {
     xkb_layout us
     # Capslock key should work as ctrl key
     # See /usr/share/X11/xkb/rules/xorg.lst for options
-    xkb_options ctrl:nocaps
+    xkb_options ctrl:nocaps,altwin:swap_lalt_lwin
 }
 input type:touchpad {
       dwt enabled
@@ -379,7 +379,7 @@ $bindsym $mod+$alt_mod+$up_alt move workspace to output up
 $bindsym $mod+p exec env RUST_BACKTRACE=1 swayr switch-window &>> /tmp/swayr.log
 
 ## Navigation // Switch to the last recently used window ##
-$bindsym Mod4+Tab exec env RUST_BACKTRACE=1 swayr switch-to-urgent-or-lru-window &>> /tmp/swayr.log
+$bindsym $alt_mod+Tab exec env RUST_BACKTRACE=1 swayr switch-to-urgent-or-lru-window &>> /tmp/swayr.log
 
 ## Navigation // Switch to the last recently used workspace ##
 $bindsym $mod+Tab workspace back_and_forth
