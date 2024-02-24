@@ -13,7 +13,6 @@ end
 -- This is where you actually apply your config choices
 
 config.color_scheme = "Dracula"
-config.use_fancy_tab_bar = false
 
 -- How many lines of scrollback you want to retain per tab
 config.scrollback_lines = 100000
@@ -21,10 +20,10 @@ config.scrollback_lines = 100000
 -- Window
 config.window_background_opacity = 1
 config.window_padding = {
-  left = 0,
-  right = 0,
-  top = 0,
-  bottom = 0,
+  left = '0.5cell',
+  right = '0.5cell',
+  top = '0.5cell',
+  bottom = '0cell',
 }
 config.window_decorations = "RESIZE"
 
@@ -32,11 +31,17 @@ config.window_decorations = "RESIZE"
 config.font = wezterm.font_with_fallback({
   -- { family = "Hack Nerd Font Mono", weight = "Bold" },
   { family = "Hack Nerd Font Mono" },
-  { family = "HarmonyOS Sans" },
+  { family = "HarmonyOS Sans SC" },
 })
 -- config.font = wezterm.font("LXGW WenKai", { weight = "Bold" })
-config.font_size = 12.5
+if wezterm.target_triple == 'aarch64-apple-darwin' then
+   config.font_size = 13.5
+else
+   config.font_size = 12.5
+end 
 
+-- Tab Bar
+config.use_fancy_tab_bar = false
 -- hide tab bar
 config.hide_tab_bar_if_only_one_tab = true
 
@@ -60,5 +65,6 @@ config.keys = keymaps
 if wezterm.target_triple:find("darwin") then
   config.native_macos_fullscreen_mode = true
 end
+
 -- and finally, return the configuration to wezterm
 return config
