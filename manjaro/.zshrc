@@ -113,7 +113,13 @@ export EDITOR='nvim'
 
 
 # user configuration
-bindkey \^U backward-kill-line
+bindkey \^U backward-kill-line # Ctrl-w kill a word
+unix-word-rubout() {
+  local WORDCHARS=$'!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~'
+  zle backward-kill-word
+}
+zle -N unix-word-rubout
+bindkey '^H' unix-word-rubout # Ctrl-delete kill from cursor to space, can use `showkey -a` find key
 
 # active fzf, first run `sudo pacman -S fzf fd`
 [ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
@@ -145,6 +151,9 @@ eval "$(pyenv virtualenv-init -)"
 
 # go bin path
 export PATH="${HOME}/go/bin:${PATH:+:${PATH}}"
+
+# rust cargo
+export PATH="${HOME}/.cargo/bin:${PATH:+:${PATH}}"
 
 # pipx completion
 autoload -U bashcompinit
