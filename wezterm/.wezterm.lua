@@ -20,10 +20,10 @@ config.scrollback_lines = 100000
 -- Window
 config.window_background_opacity = 1
 config.window_padding = {
-  left = '0.5cell',
-  right = '0.5cell',
-  top = '0.5cell',
-  bottom = '0cell',
+  left = "0.5cell",
+  right = "0.5cell",
+  top = "0.5cell",
+  bottom = "0cell",
 }
 config.window_decorations = "RESIZE"
 
@@ -34,11 +34,11 @@ config.font = wezterm.font_with_fallback({
   { family = "HarmonyOS Sans SC" },
 })
 -- config.font = wezterm.font("LXGW WenKai", { weight = "Bold" })
-if wezterm.target_triple == 'aarch64-apple-darwin' then
-   config.font_size = 13.5
+if wezterm.target_triple == "aarch64-apple-darwin" then
+  config.font_size = 13.5
 else
-   config.font_size = 12.5
-end 
+  config.font_size = 12.5
+end
 
 -- Tab Bar
 config.use_fancy_tab_bar = false
@@ -59,6 +59,8 @@ local keymaps = {
   { key = "f", mods = "ALT", action = wezterm.action({ SendString = "\x1bf" }) },
   -- Alt-d as delete-word
   { key = "d", mods = "ALT", action = wezterm.action({ SendString = "\x1bd" }) },
+  -- CTRL-SHIFT-l activates the debug overlay
+  { key = "L", mods = "CTRL", action = wezterm.action.ShowDebugOverlay },
 }
 config.keys = keymaps
 
