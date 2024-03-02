@@ -1,12 +1,13 @@
 alias vi="nvim"
-alias vidos='vi  -c ":e ++ff=unix" -c "set list"'
+# vim show special characters
+alias vidos='vim  -c ":e ++ff=unix" -c "set list"'
 alias rm='echo "This is not the command you are looking for."; false'
 alias tp="trash-put"
 alias gbr="git branch -r --sort=-committerdate --format='%(HEAD)%(color:yellow)%(refname:short)|%(color:bold green)%(committerdate:relative)|%(color:blue)%(subject)|%(color:magenta)%(authorname)%(color:reset)' --color=always | column -ts'|'"
 alias img_upload='wl-paste | curl -s -F "file=@-;filename=.png" https://x0.at/ | tee >(wl-copy) >(xargs notify-send)'
 alias mvi='mpv --config-dir=$HOME/.config/mvi'
 
-alias ls='exa --color=always --group-directories-first'
+alias ls='eza --color=always --group-directories-first'
 alias ll='eza -alF --sort=modified --colour always'
 # kernelName="$(uname -s)"
 # 
