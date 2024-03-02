@@ -4,6 +4,7 @@ alias vidos='vim  -c ":e ++ff=unix" -c "set list"'
 alias rm='echo "This is not the command you are looking for."; false'
 alias tp="trash-put"
 alias gbr="git branch -r --sort=-committerdate --format='%(HEAD)%(color:yellow)%(refname:short)|%(color:bold green)%(committerdate:relative)|%(color:blue)%(subject)|%(color:magenta)%(authorname)%(color:reset)' --color=always | column -ts'|'"
+alias memTop=$'ps -e -o rss,args | awk \'{print $1 " " $2 }\' | awk \'{tot[$2]+=$1;count[$2]++} END {for (i in tot) {print tot[i],i,count[i]}}\' | sort -n'
 alias img_upload='wl-paste | curl -s -F "file=@-;filename=.png" https://x0.at/ | tee >(wl-copy) >(xargs notify-send)'
 alias mvi='mpv --config-dir=$HOME/.config/mvi'
 
@@ -23,3 +24,4 @@ alias ll='eza -alF --sort=modified --colour always'
 with_proxy(){
    HTTPS_PROXY=http://127.0.0.1:7890 HTTP_PROXY=https://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7891 "$@"
 }
+
