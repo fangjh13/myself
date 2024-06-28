@@ -37,7 +37,7 @@ config.font = wezterm.font_with_fallback({
 if wezterm.target_triple == "aarch64-apple-darwin" then
   config.font_size = 13.5
 else
-  config.font_size = 12.5
+  config.font_size = 10
 end
 
 -- Tab Bar

@@ -7,6 +7,8 @@ alias gbr="git branch -r --sort=-committerdate --format='%(HEAD)%(color:yellow)%
 alias memTop=$'ps -e -o rss,args | awk \'{print $1 " " $2 }\' | awk \'{tot[$2]+=$1;count[$2]++} END {for (i in tot) {print tot[i],i,count[i]}}\' | sort -n'
 alias img_upload='wl-paste | curl -s -F "file=@-;filename=.png" https://x0.at/ | tee >(wl-copy) >(xargs notify-send)'
 alias mvi='mpv --config-dir=$HOME/.config/mvi'
+# show current connected wifi password
+alias wifi='nmcli dev wifi show-password'
 
 alias ls='eza --color=always --group-directories-first'
 alias ll='eza -alF --sort=modified --colour always'
