@@ -2,17 +2,17 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/fython/.oh-my-zsh"
+export ZSH="$HOME/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME=""
+# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
+ZSH_THEME="robbyrussell"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in $ZSH/themes/
+# a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
 # If set to an empty array, this variable will have no effect.
 # ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
@@ -23,16 +23,17 @@ ZSH_THEME=""
 # Case-sensitive completion must be off. _ and - will be interchangeable.
 # HYPHEN_INSENSITIVE="true"
 
-# Uncomment one of the following lines to change the auto-update behavior
-# zstyle ':omz:update' mode disabled  # disable automatic updates
-# zstyle ':omz:update' mode auto      # update automatically without asking
-# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
+# Uncomment the following line to disable bi-weekly auto-update checks.
+# DISABLE_AUTO_UPDATE="true"
+
+# Uncomment the following line to automatically update without prompting.
+# DISABLE_UPDATE_PROMPT="true"
 
 # Uncomment the following line to change how often to auto-update (in days).
-# zstyle ':omz:update' frequency 13
+# export UPDATE_ZSH_DAYS=13
 
 # Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS="true"
+# DISABLE_MAGIC_FUNCTIONS=true
 
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
@@ -44,9 +45,6 @@ ZSH_THEME=""
 # ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
-# You can also set it to another string to have that shown instead of the default red dots.
-# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
-# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
 # COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
@@ -63,37 +61,54 @@ ZSH_THEME=""
 # HIST_STAMPS="mm/dd/yyyy"
 
 # Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
+ZSH_CUSTOM=~/.oh-my-zsh/custom
 
 # Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
+# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
+# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
+  zsh-syntax-highlighting
+  zsh-history-substring-search
+  zsh-autosuggestions
   copypath
   copybuffer
-  zsh-autosuggestions
-  zsh-syntax-highlighting
 )
 
+# add additional completion definitions for Zsh.
 fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
+# [pure](https://github.com/sindresorhus/pure)
+fpath+=(${ZSH_CUSTOM}/pure)
+
 source $ZSH/oh-my-zsh.sh
+
+# Initialize the prompt system
+autoload -U promptinit; promptinit
+prompt pure
+
+# zsh-history-substring-search bind keyboard shortcuts 
+# https://github.com/zsh-users/zsh-history-substring-search#zsh-history-substring-search
+bindkey -M emacs '^P' history-substring-search-up
+bindkey -M emacs '^N' history-substring-search-down
+bindkey '^[OA' history-substring-search-up     # 
+bindkey '^[OB' history-substring-search-down   # 
 
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
-# export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='vim'
+else
+  export EDITOR='nvim'
+fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -108,46 +123,28 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 
-# Fython's configuration #
-##########################
-
-# CTRL+u same as bash
-bindkey \^U backward-kill-line
-
-# fix for navigation keys in JetBrains terminal
-if [[ "$TERMINAL_EMULATOR" == "JetBrains-JediTerm" ]]; then
-  bindkey "∫" backward-word # Option-b
-  bindkey "ƒ" forward-word # Option-f
-  bindkey "∂" delete-word # Option-d
+# user configuration
+bindkey \^U backward-kill-line # Ctrl-w kill a word
+unix-word-rubout() {
+  local WORDCHARS=$'!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~'
+  zle backward-kill-word
+}
+zle -N unix-word-rubout
+bindkey '^H' unix-word-rubout # Ctrl-delete kill from cursor to space, can use `showkey -a` find key
+# macos need rebind
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  bindkey '<CTL-H=BS>' unix-word-rubout
 fi
 
-export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
-export PATH=/Users/fython/.local/bin:/usr/local/sbin${PATH:+:${PATH}}
-export MANPAGER="less -I"
-
-# `pipx` activate completions for zsh need to have bashcompinit enabled in zsh
-autoload -U bashcompinit
-bashcompinit
-eval "$(register-python-argcomplete pipx)"
-
-# Initialize the prompt system [https://github.com/sindresorhus/pure]
-autoload -U promptinit; promptinit
-prompt pure
-
-# less filter use pygments
-export LESS='-R'
-export LESSOPEN='|~/.lessfilter %s'
-
-# load my aliases
-if [ -e ~/.my-aliases ]
-then
-    . ~/.my-aliases
-fi
-     
 # active fzf
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-export FZF_DEFAULT_OPTS="--no-mouse --height 50% -1 --reverse --multi --inline-info --ansi --preview="'"[[ $(file --mime {}) =~ binary ]] && echo {} is a binary file || (bat --style=numbers --color=always {} || highlight -O ansi -l {} || coderay {} || rougify {} || cat {}) 2> /dev/null | head -300"'" --preview-window="'"right:hidden:wrap"'" --bind="'"f3:execute(bat --style=numbers {} || less -f {}),ctrl-w:toggle-preview,ctrl-d:half-page-down,ctrl-u:half-page-up,ctrl-a:select-all+accept,ctrl-y:execute-silent(echo {+} | pbcopy)"'""
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+else
+  # first run `sudo pacman -S fzf fd`
+  [ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
+  [ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
+fi
+export FZF_DEFAULT_OPTS="--no-mouse --height 50% -1 --reverse --multi --inline-info --ansi --preview="'"[[ $(file --mime {}) =~ binary ]] && echo {} is a binary file || (bat --style=numbers --color=always {} || highlight -O ansi -l {} || coderay {} || rougify {} || cat {}) 2> /dev/null | head -300"'" --preview-window="'"right:hidden:wrap"'" --bind="'"f3:execute(bat --style=numbers {} || less -f {}),ctrl-w:toggle-preview,ctrl-d:half-page-down,ctrl-u:half-page-up,ctrl-a:select-all+accept,ctrl-y:execute-silent(echo {+} | wl-copy)"'""
 export FD_OPTIONS="--follow --hidden --exclude .git --color=always"
 # Use git-ls-files inside git repo, otherwise fd
 export FZF_DEFAULT_COMMAND="git ls-tree -r --name-only HEAD --cached --others --exclude-standard || fd --type f --type l ${FD_OPTIONS}"
@@ -156,24 +153,92 @@ export FZF_CTRL_T_COMMAND="fd ${FD_OPTIONS}"
 export FZF_ALT_C_COMMAND="fd --type d ${FD_OPTIONS}"
 export FZF_CTRL_R_OPTS="--layout=default"
 
-export BAT_PAGER="less -R"
 
-# display system info
-if [[ "$OLDPWD" == "/Users/fython" ]]; then
-    neofetch
+# my personal aliases
+if [ -e ~/.my-aliases ]
+then
+    . ~/.my-aliases
 fi
 
-# Load pyenv automatically
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init --path)"
+# less filter use pygments
+export LESS='-R'
+export LESSOPEN='|~/.lessfilter %s'
+export BAT_PAGER="less -R"
+
+# pyenv bin environment
+export PYENV_ROOT="${HOME}/.pyenv"
+export PATH="${PYENV_ROOT}/bin:${PATH:+:${PATH}}"
 eval "$(pyenv init -)"
+# install pyenv-virtualenv, enable auto-activation of virtualenvs
 eval "$(pyenv virtualenv-init -)"
 
-# golang env
-export GOPATH=$HOME/go
-export GOROOT="$(brew --prefix golang)/libexec"
-export PATH="${GOPATH}/bin:${GOROOT}/bin:${PATH}"
+# go bin path
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  # Mac OSX
+  export GOPATH=$HOME/go
+  export GOROOT="$(brew --prefix golang)/libexec"
+  export PATH="${GOPATH}/bin:${GOROOT}/bin:${PATH}"
+else
+  export PATH="${HOME}/go/bin:${PATH:+:${PATH}}"
+fi
+
+# rust cargo
+export PATH="${HOME}/.cargo/bin:${PATH:+:${PATH}}"
+
+# `pipx` activate completions for zsh need to have bashcompinit enabled in zsh
+autoload -U bashcompinit
+bashcompinit
+eval "$(register-python-argcomplete pipx)"
+
+# Conda initialize
+# !! Contents within this block are managed by 'conda init' !!
+function conda_activate {
+    __conda_setup="$('${HOME}/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+    if [ $? -eq 0 ]; then
+        eval "$__conda_setup"
+    else
+        if [ -f "${HOME}/miniconda3/etc/profile.d/conda.sh" ]; then
+            . "${HOME}/miniconda3/etc/profile.d/conda.sh"
+        else
+            export PATH="${HOME}/miniconda3/bin:$PATH"
+        fi
+    fi
+    unset __conda_setup
+}
+
+# Node Version Manager
+# maual install https://github.com/nvm-sh/nvm?tab=readme-ov-file#git-install
+function nvm_activate {
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+    # Calling `nvm use` automatically in a directory with a .nvmrc file
+    # place this after nvm initialization!
+    autoload -U add-zsh-hook
+    
+    load-nvmrc() {
+      local nvmrc_path
+      nvmrc_path="$(nvm_find_nvmrc)"
+    
+      if [ -n "$nvmrc_path" ]; then
+        local nvmrc_node_version
+        nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
+    
+        if [ "$nvmrc_node_version" = "N/A" ]; then
+          nvm install
+        elif [ "$nvmrc_node_version" != "$(nvm version)" ]; then
+          nvm use
+        fi
+      elif [ -n "$(PWD=$OLDPWD nvm_find_nvmrc)" ] && [ "$(nvm version)" != "$(nvm version default)" ]; then
+        echo "Reverting to nvm default version"
+        nvm use default
+      fi
+    }
+    
+    add-zsh-hook chpwd load-nvmrc
+    load-nvmrc
+}
 
 # swith different JDK versions
 # Arch can use `archlinux-java` script
@@ -186,4 +251,6 @@ export PATH="${GOPATH}/bin:${GOROOT}/bin:${PATH}"
 #         export JAVA_HOME=$("${home}" -v "${version}")
 #         java -version
 #     fi
-# }    
+# }
+
+
