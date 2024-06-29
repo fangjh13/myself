@@ -4,7 +4,7 @@ launcherHotkey = {'option'}
 applist = {
     {shortcut = '1',appname = 'Finder'},
     {shortcut = '2',appname = 'Google Chrome'},
-    {shortcut = '3',appname = '/Applications/iTerm.app'},
+    {shortcut = '3',appname = '/Applications/WezTerm.app'},
     {shortcut = '4',appname = 'WeChat'},
     {shortcut = '5',appname = 'PyCharm'},
 }
