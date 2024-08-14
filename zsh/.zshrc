@@ -136,16 +136,25 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   bindkey '<CTL-H=BS>' unix-word-rubout
 fi
 
+# ----- fzf && fd -----
 # active fzf
 if [[ "$OSTYPE" == "darwin"* ]]; then
   [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+  _copy_command="pbcopy"
 else
   # first run `sudo pacman -S fzf fd`
   [ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
   [ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
+  # wayland
+  if [ -n "$WAYLAND_DISPLAY" ]; then
+      _copy_command="wl-copy"
+  else
+    # X window clipboard
+      _copy_command="xclip -sel clip"
+  fi
 fi
-export FZF_DEFAULT_OPTS="--no-mouse --height 50% -1 --reverse --multi --inline-info --ansi --preview="'"[[ $(file --mime {}) =~ binary ]] && echo {} is a binary file || (bat --style=numbers --color=always {} || highlight -O ansi -l {} || coderay {} || rougify {} || cat {}) 2> /dev/null | head -300"'" --preview-window="'"right:hidden:wrap"'" --bind="'"f3:execute(bat --style=numbers {} || less -f {}),ctrl-w:toggle-preview,ctrl-d:half-page-down,ctrl-u:half-page-up,ctrl-a:select-all+accept,ctrl-y:execute-silent(echo {+} | wl-copy)"'""
-export FD_OPTIONS="--follow --hidden --exclude .git --color=always"
+export FZF_DEFAULT_OPTS="--no-mouse --height 50% -1 --reverse --multi --inline-info --ansi --preview='[[ -d {} ]] && eza --tree --color=always {} || ([[ \$(file --mime {}) =~ binary ]] && echo {} is a binary file) || (bat --style=numbers --color=always --line-range=:500 {} || highlight -O ansi -l {} || coderay {} || rougify {} || cat {}) 2> /dev/null | head -300' --preview-window='right:hidden:wrap' --bind='f3:execute(bat --style=numbers {} || less -f {}),ctrl-w:toggle-preview,ctrl-d:half-page-down,ctrl-u:half-page-up,ctrl-a:select-all+accept,ctrl-y:execute-silent(echo {+} | $_copy_command)'"
+FD_OPTIONS="--follow --hidden --exclude .git --color=always"
 # Use git-ls-files inside git repo, otherwise fd
 export FZF_DEFAULT_COMMAND="git ls-tree -r --name-only HEAD --cached --others --exclude-standard || fd --type f --type l ${FD_OPTIONS}"
 # To apply the command to CTRL-T as well
@@ -153,6 +162,23 @@ export FZF_CTRL_T_COMMAND="fd ${FD_OPTIONS}"
 export FZF_ALT_C_COMMAND="fd --type d ${FD_OPTIONS}"
 export FZF_CTRL_R_OPTS="--layout=default"
 
+# Use fd (https://github.com/sharkdp/fd) for listing path candidates.
+# - The first argument to the function ($1) is the base path to start traversal
+# - See the source code (completion.{bash,zsh}) for the details.
+_fzf_compgen_path() {
+  fd --hidden --follow --exclude ".git" . "$1"
+}
+
+# Use fd to generate the list for directory completion
+_fzf_compgen_dir() {
+  fd --type d --hidden --follow --exclude ".git" . "$1"
+}
+
+# fzf-git (https://github.com/junegunn/fzf-git.sh)
+source ~/.oh-my-zsh/custom/fzf-git.sh/fzf-git.sh
+
+# smarter cd command `z` (https://github.com/ajeetdsouza/zoxide)
+eval "$(zoxide init zsh)"
 
 # my personal aliases
 if [ -e ~/.my-aliases ]

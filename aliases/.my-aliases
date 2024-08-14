@@ -10,7 +10,7 @@ alias mvi='mpv --config-dir=$HOME/.config/mvi'
 # show current connected wifi password
 alias wifi='nmcli dev wifi show-password'
 
-alias ls='eza --color=always --group-directories-first'
+alias ls='eza --color=always --git --no-filesize --icons=always --no-time --no-user --no-permissions --group-directories-first'
 alias ll='eza -alF --sort=modified --colour always'
 # kernelName="$(uname -s)"
 # 
