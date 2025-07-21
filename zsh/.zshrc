@@ -88,7 +88,7 @@ source $ZSH/oh-my-zsh.sh
 autoload -U promptinit; promptinit
 prompt pure
 
-# zsh-history-substring-search bind keyboard shortcuts 
+# zsh-history-substring-search bind keyboard shortcuts
 # https://github.com/zsh-users/zsh-history-substring-search#zsh-history-substring-search
 bindkey -M emacs '^P' history-substring-search-up
 bindkey -M emacs '^N' history-substring-search-down
@@ -137,22 +137,9 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 fi
 
 # ----- fzf && fd -----
-# active fzf
-if [[ "$OSTYPE" == "darwin"* ]]; then
-  [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-  _copy_command="pbcopy"
-else
-  # first run `sudo pacman -S fzf fd`
-  [ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
-  [ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
-  # wayland
-  if [ -n "$WAYLAND_DISPLAY" ]; then
-      _copy_command="wl-copy"
-  else
-    # X window clipboard
-      _copy_command="xclip -sel clip"
-  fi
-fi
+# Set up fzf key bindings and fuzzy completion
+source <(fzf --zsh)
+_copy_command="pbcopy"
 export FZF_DEFAULT_OPTS="--no-mouse --height 50% -1 --reverse --multi --inline-info --ansi --preview='[[ -d {} ]] && eza --tree --color=always {} || ([[ \$(file --mime {}) =~ binary ]] && echo {} is a binary file) || (bat --style=numbers --color=always --line-range=:500 {} || highlight -O ansi -l {} || coderay {} || rougify {} || cat {}) 2> /dev/null | head -300' --preview-window='right:hidden:wrap' --bind='f3:execute(bat --style=numbers {} || less -f {}),ctrl-w:toggle-preview,ctrl-d:half-page-down,ctrl-u:half-page-up,ctrl-a:select-all+accept,ctrl-y:execute-silent(echo {+} | $_copy_command)'"
 FD_OPTIONS="--follow --hidden --exclude .git --color=always"
 # Use git-ls-files inside git repo, otherwise fd
@@ -175,7 +162,7 @@ _fzf_compgen_dir() {
 }
 
 # fzf-git (https://github.com/junegunn/fzf-git.sh)
-source ~/.oh-my-zsh/custom/fzf-git.sh/fzf-git.sh
+source ~/.oh-my-zsh/custom/plugins/fzf-git.sh/fzf-git.sh
 
 # smarter cd command `z` (https://github.com/ajeetdsouza/zoxide)
 eval "$(zoxide init zsh)"
@@ -191,13 +178,6 @@ export LESS='-R'
 export LESSOPEN='|~/.lessfilter %s'
 export BAT_PAGER="less -R"
 
-# pyenv bin environment
-export PYENV_ROOT="${HOME}/.pyenv"
-export PATH="${PYENV_ROOT}/bin:${PATH:+:${PATH}}"
-eval "$(pyenv init -)"
-# install pyenv-virtualenv, enable auto-activation of virtualenvs
-eval "$(pyenv virtualenv-init -)"
-
 # go bin path
 if [[ "$OSTYPE" == "darwin"* ]]; then
   # Mac OSX
@@ -212,8 +192,7 @@ fi
 export PATH="${HOME}/.cargo/bin:${PATH:+:${PATH}}"
 
 # `pipx` activate completions for zsh need to have bashcompinit enabled in zsh
-autoload -U bashcompinit
-bashcompinit
+autoload -U compinit && compinit
 eval "$(register-python-argcomplete pipx)"
 
 # Conda initialize
@@ -232,6 +211,10 @@ function conda_activate {
     unset __conda_setup
 }
 
+if command -v kubectl &>/dev/null; then
+  alias k='kubectl'
+fi
+
 # Node Version Manager
 # maual install https://github.com/nvm-sh/nvm?tab=readme-ov-file#git-install
 function nvm_activate {
@@ -242,15 +225,15 @@ function nvm_activate {
     # Calling `nvm use` automatically in a directory with a .nvmrc file
     # place this after nvm initialization!
     autoload -U add-zsh-hook
-    
+
     load-nvmrc() {
       local nvmrc_path
       nvmrc_path="$(nvm_find_nvmrc)"
-    
+
       if [ -n "$nvmrc_path" ]; then
         local nvmrc_node_version
         nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
-    
+
         if [ "$nvmrc_node_version" = "N/A" ]; then
           nvm install
         elif [ "$nvmrc_node_version" != "$(nvm version)" ]; then
@@ -261,7 +244,7 @@ function nvm_activate {
         nvm use default
       fi
     }
-    
+
     add-zsh-hook chpwd load-nvmrc
     load-nvmrc
 }
